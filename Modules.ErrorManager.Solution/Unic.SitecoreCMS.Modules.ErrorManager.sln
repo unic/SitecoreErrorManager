@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unic.SitecoreCMS.Modules.ErrorManager.Website", "..\Modules.ErrorManager.Website\Unic.SitecoreCMS.Modules.ErrorManager.Website.csproj", "{75EECC03-C9A3-474B-9D33-0DECE9A685D9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unic.SitecoreCMS.Modules.ErrorManager", "..\Modules.ErrorManager\Unic.SitecoreCMS.Modules.ErrorManager.csproj", "{09FE1168-209C-4D86-A6ED-73AD76326A25}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{75EECC03-C9A3-474B-9D33-0DECE9A685D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{75EECC03-C9A3-474B-9D33-0DECE9A685D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{75EECC03-C9A3-474B-9D33-0DECE9A685D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{75EECC03-C9A3-474B-9D33-0DECE9A685D9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{09FE1168-209C-4D86-A6ED-73AD76326A25}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{09FE1168-209C-4D86-A6ED-73AD76326A25}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{09FE1168-209C-4D86-A6ED-73AD76326A25}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{09FE1168-209C-4D86-A6ED-73AD76326A25}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
