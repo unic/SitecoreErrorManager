@@ -15,4 +15,4 @@ The current version of the Sitecore Error Manager works with the following Sitec
 - 6.5.0
 
 ## License
-The Sitecore Error Manager is licensed under the LGPL. Please see [LICENSE.txt] for more informations.
+The Sitecore Error Manager is licensed under the LGPL. Please see [LICENSE.txt] (LICENSE.txt) for more informations.
