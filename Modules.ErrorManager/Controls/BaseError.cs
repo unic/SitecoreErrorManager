@@ -18,6 +18,7 @@ using System.Net;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
 using System.Web;
+using Sitecore.Configuration;
 using Sitecore.Data.Items;
 using Sitecore.Data.Managers;
 using Sitecore.Globalization;
@@ -216,7 +217,16 @@ namespace Unic.SitecoreCMS.Modules.ErrorManager.Controls
             // outputs the page
             if (response != null)
             {
-                Response.Write(new StreamReader(response.GetResponseStream()).ReadToEnd());
+                string body = new StreamReader(response.GetResponseStream()).ReadToEnd();
+
+                // Insert image with request to the static page if Analytics is enabled.
+                // This is a hotfix for a Sitecore bug, see Sitecore issue #378950
+                if (Settings.GetBoolSetting("Analytics.Enabled", false) && site.EnableAnalytics)
+                {
+                    body = body.Replace("</body>", string.Format("<img src=\"{0}?{1}\" height=\"1\" width=\"1\" border=\"0\"></body>", Sitecore.Configuration.Settings.GetSetting(SettingsKey + ".Static"), base.Request.QueryString));
+                }
+
+                Response.Write(body);
             }
             else
             {
