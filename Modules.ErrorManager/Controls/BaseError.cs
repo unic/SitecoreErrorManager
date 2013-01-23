@@ -106,6 +106,7 @@ namespace Unic.SitecoreCMS.Modules.ErrorManager.Controls
                 // general options for generating url
                 UrlOptions options = UrlOptions.DefaultOptions;
                 options.LanguageEmbedding = LanguageEmbedding.Always;
+                options.LanguageLocation = LanguageLocation.QueryString;
                 options.Language = lang;
                 options.Site = site;
                 options.AlwaysIncludeServerUrl = true;
