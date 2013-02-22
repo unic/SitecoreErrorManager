@@ -13,6 +13,7 @@
 #endregion
 
 using System.Linq;
+using System.Web;
 using Sitecore.Data.Items;
 using Sitecore.Data.Managers;
 using Sitecore.Globalization;
@@ -37,7 +38,9 @@ namespace Unic.SitecoreCMS.Modules.ErrorManager.Extensions
             Item itemInLang = ItemManager.GetItem(item.ID, language, Sitecore.Data.Version.Latest, item.Database);
             if (itemInLang != null && itemInLang.Versions.GetVersions().Length > 0)
             {
-                if (string.IsNullOrEmpty(availableLanguages) || availableLanguages.ToLower().Split(',').Contains<string>(itemInLang.Language.Name.ToLower()))
+                if (string.IsNullOrEmpty(availableLanguages)
+                    || (HttpContext.Current != null && HttpContext.Current.Request.QueryString["em_force"] == "true")
+                    || availableLanguages.ToLower().Split(',').Contains<string>(itemInLang.Language.Name.ToLower()))
                 {
                     return true;
                 }
