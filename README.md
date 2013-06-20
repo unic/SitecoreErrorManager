@@ -13,6 +13,7 @@ The installation can be done with a Sitecore package or manually with the provid
 The current version of the Sitecore Error Manager works with the following Sitecore versions:
 - 6.4.1
 - 6.5.0
+- 6.6.0
 
 ## License
 The Sitecore Error Manager is licensed under the LGPL. Please see [LICENSE.txt] (https://github.com/unic/SitecoreErrorManager/blob/master/LICENSE.txt) for more informations.
