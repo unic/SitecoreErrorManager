@@ -113,7 +113,8 @@ namespace Unic.SitecoreCMS.Modules.ErrorManager.Controls
                 options.AlwaysIncludeServerUrl = true;
 
                 // get the error item
-                Item item = site.Database.GetItem(site.StartPath + Sitecore.Configuration.Settings.GetSetting(SettingsKey + ".Item"));
+                string path = Settings.GetBoolSetting("ErrorManager.UseRootPath", false) ? site.RootPath : site.StartPath;
+                Item item = site.Database.GetItem(path + Sitecore.Configuration.Settings.GetSetting(SettingsKey + ".Item"));
 
                 // resolve the url for the error page
                 if (item != null && item.HasLanguageVersion(lang, availableLanguages))
