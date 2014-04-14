@@ -26,7 +26,6 @@ using Sitecore.Links;
 using Sitecore.Sites;
 using Unic.SitecoreCMS.Modules.ErrorManager.Extensions;
 using Unic.SitecoreCMS.Modules.ErrorManager.Utilities;
-using System.Text;
 
 namespace Unic.SitecoreCMS.Modules.ErrorManager.Controls
 {
@@ -158,16 +157,17 @@ namespace Unic.SitecoreCMS.Modules.ErrorManager.Controls
                         Cookie cookie = new Cookie();
                         /*  We have to add the target host because the cookie does not contain the domain information.
                             In this case, this behaviour is not a security issue, because the target is our own platform.
-                            Further informations: http://stackoverflow.com/a/460990 
+                            Further information: http://stackoverflow.com/a/460990 
                         */
                         cookie.Domain = request.RequestUri.Host;
                         cookie.Expires = httpCookie.Expires;
                         cookie.Name = httpCookie.Name;
                         cookie.Path = httpCookie.Path;
                         cookie.Secure = httpCookie.Secure;
-                        //// Encode cookie value for handling comma separator
-                        //// http://stackoverflow.com/questions/1136405/handling-a-comma-inside-a-cookie-value-using-nets-c-system-net-cookie
-                        cookie.Value =HttpUtility.UrlEncode(httpCookie.Value);
+
+                        // Encode cookie value for handling commas (and other possibly unsupported chars)
+                        // Furhter information: http://stackoverflow.com/q/1136405
+                        cookie.Value = HttpUtility.UrlEncode(httpCookie.Value);
 
                         request.CookieContainer.Add(cookie);
                     }
