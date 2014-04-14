@@ -26,6 +26,7 @@ using Sitecore.Links;
 using Sitecore.Sites;
 using Unic.SitecoreCMS.Modules.ErrorManager.Extensions;
 using Unic.SitecoreCMS.Modules.ErrorManager.Utilities;
+using System.Text;
 
 namespace Unic.SitecoreCMS.Modules.ErrorManager.Controls
 {
@@ -164,7 +165,9 @@ namespace Unic.SitecoreCMS.Modules.ErrorManager.Controls
                         cookie.Name = httpCookie.Name;
                         cookie.Path = httpCookie.Path;
                         cookie.Secure = httpCookie.Secure;
-                        cookie.Value = httpCookie.Value;
+                        //// Encode cookie value for handling comma separator
+                        //// http://stackoverflow.com/questions/1136405/handling-a-comma-inside-a-cookie-value-using-nets-c-system-net-cookie
+                        cookie.Value =HttpUtility.UrlEncode(httpCookie.Value);
 
                         request.CookieContainer.Add(cookie);
                     }
