@@ -12,11 +12,12 @@
 
 #endregion
 
-using Sitecore.Pipelines.HttpRequest;
-using Unic.SitecoreCMS.Modules.ErrorManager.Extensions;
-
-namespace Unic.SitecoreCMS.Modules.ErrorManager.Pipelines.HttpRequest
+namespace Unic.ErrorManager.Pipelines.HttpRequest
 {
+    using Sitecore.Pipelines.HttpRequest;
+
+    using Unic.ErrorManager.Extensions;
+
     /// <summary>
     /// Pipeline processor to resolve if the resolved context item has a valid language version. You can speficy available (valid) languages
     /// with a comma-separated list of language names in the &lt;site&gt;-configuration in the attribute <c>availableLanguages</c>. This

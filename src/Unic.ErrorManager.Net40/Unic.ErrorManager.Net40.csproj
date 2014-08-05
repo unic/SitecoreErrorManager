@@ -7,8 +7,8 @@
     <ProjectGuid>{BF98812E-3659-4A23-948F-D959157447DC}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Unic.ErrorManager.Net40</RootNamespace>
-    <AssemblyName>Unic.ErrorManager.Net40</AssemblyName>
+    <RootNamespace>Unic.ErrorManager</RootNamespace>
+    <AssemblyName>Unic.ErrorManager</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -47,9 +47,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\Unic.ErrorManager\**\*.cs" Exclude="..\Unic.ErrorManager\bin\**;
-                                                             ..\Unic.ErrorManager\obj\**;
-                                                             ..\Unic.ErrorManager\Properties\**">
+    <Compile Include="..\Unic.ErrorManager\**\*.cs" Exclude="..\Unic.ErrorManager\bin\**;&#xD;&#xA;                                                             ..\Unic.ErrorManager\obj\**;&#xD;&#xA;                                                             ..\Unic.ErrorManager\Properties\**">
       <Link>%(RecursiveDir)%(FileName)</Link>
     </Compile>
   </ItemGroup>

@@ -13,10 +13,11 @@
 #endregion
 
 using System;
-using Unic.SitecoreCMS.Modules.ErrorManager.Controls;
 
 namespace Unic.SitecoreCMS.Modules.ErrorManager.Website.sitecore_modules.Web.Error_Manager
 {
+    using Unic.ErrorManager.Controls;
+
     /// <summary>
     /// Page for status code 500 (internal server error). It inherits from the <see cref="BaseError"/>, which does all needed stuff.
     /// </summary>

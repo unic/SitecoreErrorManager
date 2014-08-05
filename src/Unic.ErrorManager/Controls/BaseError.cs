@@ -12,23 +12,25 @@
 
 #endregion
 
-using System;
-using System.IO;
-using System.Net;
-using System.Net.Security;
-using System.Security.Cryptography.X509Certificates;
-using System.Web;
-using Sitecore.Configuration;
-using Sitecore.Data.Items;
-using Sitecore.Data.Managers;
-using Sitecore.Globalization;
-using Sitecore.Links;
-using Sitecore.Sites;
-using Unic.SitecoreCMS.Modules.ErrorManager.Extensions;
-using Unic.SitecoreCMS.Modules.ErrorManager.Utilities;
-
-namespace Unic.SitecoreCMS.Modules.ErrorManager.Controls
+namespace Unic.ErrorManager.Controls
 {
+    using System;
+    using System.IO;
+    using System.Net;
+    using System.Net.Security;
+    using System.Security.Cryptography.X509Certificates;
+    using System.Web;
+
+    using Sitecore.Configuration;
+    using Sitecore.Data.Items;
+    using Sitecore.Data.Managers;
+    using Sitecore.Globalization;
+    using Sitecore.Links;
+    using Sitecore.Sites;
+
+    using Unic.ErrorManager.Extensions;
+    using Unic.ErrorManager.Utilities;
+
     /// <summary>
     /// Base class for all error pages. First of all we search for an <see cref="Sitecore.Data.Items.Item"/> in the current
     /// <see cref="Sitecore.Sites.SiteContext"/> and in the current <see cref="Sitecore.Globalization.Language"/> (or in the default language
@@ -53,18 +55,18 @@ namespace Unic.SitecoreCMS.Modules.ErrorManager.Controls
         {
             get
             {
-                return _settingsKey;
+                return this._settingsKey;
             }
             set
             {
                 string key = Sitecore.Web.WebUtil.GetSafeQueryString("key");
                 if (!string.IsNullOrEmpty(key) && !string.IsNullOrEmpty(Sitecore.Configuration.Settings.GetSetting(key)))
                 {
-                    _settingsKey = key;
+                    this._settingsKey = key;
                 }
                 else
                 {
-                    _settingsKey = value;
+                    this._settingsKey = value;
                 }
             }
         }
@@ -99,7 +101,7 @@ namespace Unic.SitecoreCMS.Modules.ErrorManager.Controls
 
             // Use the static error page if the site or the database is not available
             if (site == null || site.Database == null) {
-                url = Sitecore.Web.WebUtil.GetServerUrl() + Sitecore.Configuration.Settings.GetSetting(SettingsKey + ".Static");
+                url = Sitecore.Web.WebUtil.GetServerUrl() + Sitecore.Configuration.Settings.GetSetting(this.SettingsKey + ".Static");
             }
             else {
                 string availableLanguages = site.Properties["availableLanguages"];
@@ -114,7 +116,7 @@ namespace Unic.SitecoreCMS.Modules.ErrorManager.Controls
 
                 // get the error item
                 string path = Settings.GetBoolSetting("ErrorManager.UseRootPath", false) ? site.RootPath : site.StartPath;
-                Item item = site.Database.GetItem(path + Sitecore.Configuration.Settings.GetSetting(SettingsKey + ".Item"));
+                Item item = site.Database.GetItem(path + Sitecore.Configuration.Settings.GetSetting(this.SettingsKey + ".Item"));
 
                 // resolve the url for the error page
                 if (item != null && item.HasLanguageVersion(lang, availableLanguages))
@@ -131,13 +133,13 @@ namespace Unic.SitecoreCMS.Modules.ErrorManager.Controls
                     }
                     else
                     {
-                        url = Sitecore.Web.WebUtil.GetServerUrl() + Sitecore.Configuration.Settings.GetSetting(SettingsKey + ".Static");
+                        url = Sitecore.Web.WebUtil.GetServerUrl() + Sitecore.Configuration.Settings.GetSetting(this.SettingsKey + ".Static");
                     }
                 }
 
                 // append current raw url
                 url += url.IndexOf("?") == -1 ? "?" : "&";
-                url += "rawUrl=" + Server.UrlEncode(Sitecore.Web.WebUtil.GetRawUrl());
+                url += "rawUrl=" + this.Server.UrlEncode(Sitecore.Web.WebUtil.GetRawUrl());
             }
 
             // parse the page
@@ -148,7 +150,7 @@ namespace Unic.SitecoreCMS.Modules.ErrorManager.Controls
             if (Sitecore.Configuration.Settings.GetBoolSetting("ErrorManager.SendClientCookies", false))
             {
                 request.CookieContainer = new CookieContainer();
-                HttpCookieCollection userCookies = Request.Cookies;
+                HttpCookieCollection userCookies = this.Request.Cookies;
                 for (int userCookieCount = 0; userCookieCount < userCookies.Count; userCookieCount++)
                 {
                     HttpCookie httpCookie = userCookies.Get(userCookieCount);
@@ -224,24 +226,24 @@ namespace Unic.SitecoreCMS.Modules.ErrorManager.Controls
                 // This is a hotfix for a Sitecore bug, see Sitecore issue #378950
                 if (Settings.GetBoolSetting("Analytics.Enabled", false) && site.EnableAnalytics)
                 {
-                    body = body.Replace("</body>", string.Format("<img src=\"{0}?{1}\" height=\"1\" width=\"1\" border=\"0\"></body>", Sitecore.Configuration.Settings.GetSetting(SettingsKey + ".Static"), base.Request.QueryString));
+                    body = body.Replace("</body>", string.Format("<img src=\"{0}?{1}\" height=\"1\" width=\"1\" border=\"0\"></body>", Sitecore.Configuration.Settings.GetSetting(this.SettingsKey + ".Static"), base.Request.QueryString));
                 }
 
-                Response.Write(body);
+                this.Response.Write(body);
             }
             else
             {
-                Response.Write("Statuscode: " + StatusCode);
+                this.Response.Write("Statuscode: " + this.StatusCode);
             }
             
             // set statuscode
-            if (StatusCode > 0)
+            if (this.StatusCode > 0)
             {
-                Response.StatusCode = StatusCode;
+                this.Response.StatusCode = this.StatusCode;
             }
 
             // pass through the response we create here
-            Response.TrySkipIisCustomErrors = true;
+            this.Response.TrySkipIisCustomErrors = true;
         }
 
         /// <summary>

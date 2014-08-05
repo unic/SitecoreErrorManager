@@ -12,14 +12,15 @@
 
 #endregion
 
-using System.Linq;
-using System.Web;
-using Sitecore.Data.Items;
-using Sitecore.Data.Managers;
-using Sitecore.Globalization;
-
-namespace Unic.SitecoreCMS.Modules.ErrorManager.Extensions
+namespace Unic.ErrorManager.Extensions
 {
+    using System.Linq;
+    using System.Web;
+
+    using Sitecore.Data.Items;
+    using Sitecore.Data.Managers;
+    using Sitecore.Globalization;
+
     /// <summary>
     /// Class with extension methods for class <see cref="Sitecore.Data.Items.Item"/>.
     /// </summary>
