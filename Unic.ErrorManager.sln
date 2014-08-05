@@ -12,7 +12,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unic.ErrorManager", "src\Un
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unic.ErrorManager.Net40", "src\Unic.ErrorManager.Net40\Unic.ErrorManager.Net40.csproj", "{BF98812E-3659-4A23-948F-D959157447DC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unic.ErrorManager.Website.net40", "src\Unic.ErrorManager.Website.net40\Unic.ErrorManager.Website.net40.csproj", "{B92DBCF6-CD52-46D6-88B1-2E0EAF36CB2E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unic.ErrorManager.Website.Net40", "src\Unic.ErrorManager.Website.net40\Unic.ErrorManager.Website.Net40.csproj", "{B92DBCF6-CD52-46D6-88B1-2E0EAF36CB2E}"
 	ProjectSection(ProjectDependencies) = postProject
 		{BF98812E-3659-4A23-948F-D959157447DC} = {BF98812E-3659-4A23-948F-D959157447DC}
 	EndProjectSection
