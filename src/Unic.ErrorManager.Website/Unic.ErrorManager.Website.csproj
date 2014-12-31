@@ -47,6 +47,7 @@
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Unic.ErrorManager.Website.xml</DocumentationFile>
     <Prefer32Bit>false</Prefer32Bit>
+    <CodeAnalysisRuleSet>..\..\Unic.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
