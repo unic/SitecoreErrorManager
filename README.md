@@ -16,6 +16,7 @@ The current version of the Sitecore Error Manager works with the following Sitec
 - 6.6.0
 - 7.0
 - 7.1
+- 7.2
 
 ## Contribute
 Contributions to the module are very welcome! You can fork the project and issue [Pull Requests](https://help.github.com/articles/creating-a-pull-request) to do so.
