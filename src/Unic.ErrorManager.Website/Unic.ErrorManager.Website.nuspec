@@ -10,7 +10,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>A module to support SEO friendly, multi-site and multi-language enabled custom error messages for Sitecore.</description>
     <releaseNotes></releaseNotes>
-    <copyright>$copyright$</copyright>
+    <copyright>Copyright 2014 Unic AG</copyright>
     <tags>Sitecore Unic Error Manager 404 notfound</tags>
   </metadata>
 </package>
