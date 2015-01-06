@@ -12,7 +12,7 @@
 
 #endregion
 
-namespace Unic.ErrorManager.Extensions
+namespace Unic.ErrorManager.Core.Extensions
 {
     using System.Linq;
     using System.Web;

@@ -14,9 +14,9 @@
 
 using System;
 
-namespace Unic.SitecoreCMS.Modules.ErrorManager.Website.sitecore_modules.Web.Error_Manager
+namespace Unic.ErrorManager.sitecore_modules.Web.Error_Manager
 {
-    using Unic.ErrorManager.Controls;
+    using Unic.ErrorManager.Core.Controls;
 
     /// <summary>
     /// Page for status code 403 (forbidden). It inherits from the <see cref="BaseError"/>, which does all needed stuff.

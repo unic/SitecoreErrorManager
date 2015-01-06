@@ -12,11 +12,11 @@
 
 #endregion
 
-namespace Unic.ErrorManager.Pipelines.HttpRequest
+namespace Unic.ErrorManager.Core.Pipelines.HttpRequest
 {
     using Sitecore.Pipelines.HttpRequest;
 
-    using Unic.ErrorManager.Extensions;
+    using Unic.ErrorManager.Core.Extensions;
 
     /// <summary>
     /// Pipeline processor to resolve if the resolved context item has a valid language version. You can speficy available (valid) languages

@@ -11,8 +11,8 @@
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Unic.ErrorManager.Website</RootNamespace>
-    <AssemblyName>Unic.ErrorManager.Website</AssemblyName>
+    <RootNamespace>Unic.ErrorManager</RootNamespace>
+    <AssemblyName>Unic.ErrorManager</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <UseIISExpress>false</UseIISExpress>
     <FileUpgradeFlags>
@@ -113,9 +113,9 @@
     <None Include="Properties\PublishProfiles\LocalDeploy.pubxml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Unic.ErrorManager\Unic.ErrorManager.csproj">
+    <ProjectReference Include="..\Unic.ErrorManager.Core\Unic.ErrorManager.Core.csproj">
       <Project>{09fe1168-209c-4d86-a6ed-73ad76326a25}</Project>
-      <Name>Unic.ErrorManager</Name>
+      <Name>Unic.ErrorManager.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

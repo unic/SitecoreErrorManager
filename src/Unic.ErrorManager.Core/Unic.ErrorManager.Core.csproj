@@ -8,8 +8,8 @@
     <ProjectGuid>{09FE1168-209C-4D86-A6ED-73AD76326A25}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Unic.ErrorManager</RootNamespace>
-    <AssemblyName>Unic.ErrorManager</AssemblyName>
+    <RootNamespace>Unic.ErrorManager.Core</RootNamespace>
+    <AssemblyName>Unic.ErrorManager.Core</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -34,7 +34,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\Unic.ErrorManager.xml</DocumentationFile>
+    <DocumentationFile>bin\Release\Unic.ErrorManager.Core.xml</DocumentationFile>
     <Prefer32Bit>false</Prefer32Bit>
     <CodeAnalysisRuleSet>..\..\Unic.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>

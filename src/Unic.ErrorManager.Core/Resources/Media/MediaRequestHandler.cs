@@ -14,7 +14,7 @@
 
 #endregion
 
-namespace Unic.ErrorManager.Resources.Media
+namespace Unic.ErrorManager.Core.Resources.Media
 {
     using System.Web;
 
@@ -24,8 +24,8 @@ namespace Unic.ErrorManager.Resources.Media
     using Sitecore.Resources.Media;
     using Sitecore.SecurityModel;
 
-    using Unic.ErrorManager.Extensions;
-    using Unic.ErrorManager.Utilities;
+    using Unic.ErrorManager.Core.Extensions;
+    using Unic.ErrorManager.Core.Utilities;
 
     /// <summary>
     ///     Class implements a custom MediaRequestHandler. It redirects to the configured 404 page if a media request is
