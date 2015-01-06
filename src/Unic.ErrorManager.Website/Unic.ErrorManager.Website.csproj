@@ -54,7 +54,7 @@
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Sitecore.Kernel">
-      <HintPath>..\..\lib\net40\Sitecore.Kernel.dll</HintPath>
+      <HintPath>..\..\packages\Sitecore.Kernel.6.6.140410.34\lib\Sitecore.Kernel.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
@@ -109,6 +109,7 @@
     <Content Include="sitecore modules\Web\Error Manager\service\notfound.aspx" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="packages.config" />
     <None Include="Properties\PublishProfiles\LocalDeploy.pubxml" />
   </ItemGroup>
   <ItemGroup>
@@ -146,6 +147,9 @@
   <PropertyGroup>
     <PostBuildEvent>
     </PostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblySearchPaths>..\..\lib\; $(AssemblySearchPaths)</AssemblySearchPaths>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

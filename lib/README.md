@@ -1,5 +1,5 @@
 # Lib Directory
 
-Add the following Libraries to compile the solution:
+Add the following libraries to compile the solution:
 
 - Sitecore.Kernel.dll
