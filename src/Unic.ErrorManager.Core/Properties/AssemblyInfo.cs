@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Unic.ErrorManager.Website")]
-[assembly: AssemblyDescription("Sitecore Error Manager")]
+[assembly: AssemblyTitle("Unic.ErrorManager.Core")]
+[assembly: AssemblyDescription("Sitecore Error Manager Core Library")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Unic AG")]
-[assembly: AssemblyProduct("Unic.ErrorManager.Website")]
+[assembly: AssemblyProduct("Unic.ErrorManager.Core")]
 [assembly: AssemblyCopyright("Copyright © Unic AG")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("56a5973c-8680-44cc-9d16-4aa213473146")]
+[assembly: Guid("7806c54f-8427-402c-a241-f4f718dd4c7d")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -29,8 +29,9 @@ using System.Runtime.InteropServices;
 //      Build Number
 //      Revision
 //
-// You can specify all the values or you can default the Revision and Build Numbers 
+// You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
+// [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
 [assembly: AssemblyInformationalVersion("1.0.0.0")]
