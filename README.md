@@ -3,18 +3,25 @@ The main purpose of the Sitecore Error Manager is to show friendly error message
 
 Please see the [Wiki] (https://github.com/unic/SitecoreErrorManager/wiki) for the complete documentation.
 
-## Download
-You can either clone the repository from GitHub or download the Sitecore package from the [Sitecore Marketplace] (http://marketplace.sitecore.net/en/Modules/Sitecore_Error_Manager.aspx).
+## Download & Install
+You can either clone the repository from GitHub and build your own or download the Sitecore package from the [Sitecore Marketplace] (http://marketplace.sitecore.net/en/Modules/Sitecore_Error_Manager.aspx).
 
-## Installation
-The installation can be done with a Sitecore package or manually with the provided MSBuild targets. Please see the [Installation] (https://github.com/unic/SitecoreErrorManager/wiki/Installation) documentation for more informations.
+Please see the [Installation] (https://github.com/unic/SitecoreErrorManager/wiki/Installation) documentation for more informations.
 
-## Version
+## Build
+Please read the [build instructions](build/README.md) on how to build the module.
+
+## Supported Sitecore Versions
 The current version of the Sitecore Error Manager works with the following Sitecore versions:
 - 6.4.1
 - 6.5.0
 - 6.6.0
 - 7.0
+- 7.1
+- 7.2
+
+## Contribute
+Contributions to the module are very welcome! You can fork the project and issue [Pull Requests](https://help.github.com/articles/creating-a-pull-request) to do so.
 
 ## License
 The Sitecore Error Manager is licensed under the LGPL. Please see [LICENSE.txt] (https://github.com/unic/SitecoreErrorManager/blob/master/LICENSE.txt) for more informations.
