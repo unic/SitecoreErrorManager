@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>Unic.ErrorManager</id>
+    <version>0.0.0</version>
+    <authors>Kevin Brechbühl, Pascal Mathys, Reto Hugi</authors>
+    <owners>Unic</owners>
+    <projectUrl>https://github.com/unic/SitecoreErrorManager</projectUrl>
+    <iconUrl>https://www.unic.com/img/unic-logo.jpg</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>A module to support SEO friendly, multi-site and multi-language enabled custom error messages for Sitecore.</description>
+    <releaseNotes></releaseNotes>
+    <copyright>Copyright 2014 Unic AG</copyright>
+    <tags>Sitecore Unic Error Manager 404 notfound</tags>
+    <dependencies>
+        <dependency id="Unic.ErrorManager.Core" version="$NuGetVersion$" />
+    </dependencies> 
+  </metadata>
+</package>
