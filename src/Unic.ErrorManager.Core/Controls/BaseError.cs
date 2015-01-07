@@ -12,7 +12,7 @@
 
 #endregion
 
-namespace Unic.ErrorManager.Controls
+namespace Unic.ErrorManager.Core.Controls
 {
     using System;
     using System.IO;
@@ -28,8 +28,8 @@ namespace Unic.ErrorManager.Controls
     using Sitecore.Links;
     using Sitecore.Sites;
 
-    using Unic.ErrorManager.Extensions;
-    using Unic.ErrorManager.Utilities;
+    using Unic.ErrorManager.Core.Extensions;
+    using Unic.ErrorManager.Core.Utilities;
 
     /// <summary>
     /// Base class for all error pages. First of all we search for an <see cref="Sitecore.Data.Items.Item"/> in the current

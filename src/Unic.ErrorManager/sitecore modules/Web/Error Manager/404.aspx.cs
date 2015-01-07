@@ -14,15 +14,15 @@
 
 using System;
 
-namespace Unic.SitecoreCMS.Modules.ErrorManager.Website.sitecore_modules.Web.Error_Manager
+namespace Unic.ErrorManager.sitecore_modules.Web.Error_Manager
 {
-    using Unic.ErrorManager.Controls;
+    using Unic.ErrorManager.Core.Controls;
 
     /// <summary>
-    /// Page for status code 403 (forbidden). It inherits from the <see cref="BaseError"/>, which does all needed stuff.
+    /// Page for status code 404 (notfound). It inherits from the <see cref="BaseError"/>, which does all needed stuff.
     /// </summary>
     /// <author>Kevin Brechbühl - Unic AG</author>
-    public partial class _403 : BaseError
+    public partial class _404 : BaseError
     {
         /// <summary>
         /// Raises the <see cref="E:System.Web.UI.Control.Load"/> event and sets the settings key and status code for the current error page.
@@ -31,8 +31,8 @@ namespace Unic.SitecoreCMS.Modules.ErrorManager.Website.sitecore_modules.Web.Err
         protected override void OnLoad(EventArgs e)
         {
             // set properties
-            base.SettingsKey = "NoAccessUrl";
-            base.StatusCode = 403;
+            base.SettingsKey = "ItemNotFoundUrl";
+            base.StatusCode = 404;
 
             // go
             base.OnLoad(e);

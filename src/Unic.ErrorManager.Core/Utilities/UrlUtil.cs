@@ -14,7 +14,7 @@
 
 #endregion
 
-namespace Unic.ErrorManager.Utilities
+namespace Unic.ErrorManager.Core.Utilities
 {
     using Sitecore.Globalization;
     using Sitecore.Sites;
