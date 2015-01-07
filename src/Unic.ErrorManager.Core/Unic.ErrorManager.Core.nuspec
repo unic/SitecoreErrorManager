@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package >
   <metadata>
-    <id>Unic.ErrorManager</id>
+    <id>Unic.ErrorManager.Core</id>
     <version>0.0.0</version>
     <authors>Kevin Brechbühl, Pascal Mathys, Reto Hugi</authors>
     <owners>Unic</owners>
@@ -12,8 +12,5 @@
     <releaseNotes></releaseNotes>
     <copyright>Copyright 2014 Unic AG</copyright>
     <tags>Sitecore Unic Error Manager 404 notfound</tags>
-    <dependencies>
-        <dependency id="Unic.ErrorManager.Core" version="$NuGetVersion$" />
-    </dependencies> 
   </metadata>
 </package>

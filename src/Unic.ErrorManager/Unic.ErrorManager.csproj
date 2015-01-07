@@ -111,6 +111,7 @@
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="Properties\PublishProfiles\LocalDeploy.pubxml" />
+    <None Include="Unic.ErrorManager.nuspec" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Unic.ErrorManager.Core\Unic.ErrorManager.Core.csproj">
