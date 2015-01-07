@@ -13,12 +13,11 @@ Please read the [build instructions](build/README.md) on how to build the module
 
 ## Supported Sitecore Versions
 The current version of the Sitecore Error Manager works with the following Sitecore versions:
-- 6.4.1
-- 6.5.0
-- 6.6.0
-- 7.0
-- 7.1
-- 7.2
+- 6.4.x
+- 6.5.x
+- 6.6.x
+- 7.x
+- 8.x
 
 ## Contribute
 Contributions to the module are very welcome! You can fork the project and issue [Pull Requests](https://help.github.com/articles/creating-a-pull-request) to do so.
