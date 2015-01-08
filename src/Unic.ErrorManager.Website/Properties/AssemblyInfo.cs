@@ -5,8 +5,8 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Unic.ErrorManager")]
-[assembly: AssemblyDescription("Sitecore Error Manager")]
+[assembly: AssemblyTitle("Sitecore ErrorManager")]
+[assembly: AssemblyDescription("A Sitecore Error Manager providing friendly Error Messages")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Unic AG")]
 [assembly: AssemblyProduct("Unic.ErrorManager")]
