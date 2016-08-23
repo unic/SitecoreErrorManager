@@ -14,7 +14,7 @@
 
 using System;
 
-namespace Unic.ErrorManager.sitecore_modules.Web.Error_Manager
+namespace Unic.ErrorManager.Website.sitecore_modules.Web.Error_Manager
 {
     using Unic.ErrorManager.Core.Controls;
 
