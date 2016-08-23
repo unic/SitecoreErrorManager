@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Unic.SitecoreCMS.Modules.ErrorManager.Website.sitecore_modules.Web.Error_Manager {
+namespace Unic.ErrorManager.Website.sitecore_modules.Web.Error_Manager {
     
     
     public partial class _500 {
