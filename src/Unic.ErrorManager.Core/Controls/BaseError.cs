@@ -12,6 +12,8 @@
 
 #endregion
 
+using Sitecore.Analytics;
+
 namespace Unic.ErrorManager.Core.Controls
 {
     using System;
@@ -224,7 +226,7 @@ namespace Unic.ErrorManager.Core.Controls
 
                 // Insert image with request to the static page if Analytics is enabled.
                 // This is a hotfix for a Sitecore bug, see Sitecore issue #378950
-                if (Settings.GetBoolSetting("Analytics.Enabled", false) && site.EnableAnalytics)
+                if (Settings.GetBoolSetting("Xdb.Enabled", false) && site.Tracking().EnableTracking)
                 {
                     body = body.Replace("</body>", string.Format("<img src=\"{0}?{1}\" height=\"1\" width=\"1\" border=\"0\"></body>", Sitecore.Configuration.Settings.GetSetting(this.SettingsKey + ".Static"), base.Request.QueryString));
                 }

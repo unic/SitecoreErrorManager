@@ -50,7 +50,7 @@ namespace Unic.ErrorManager.Core.Pipelines.HttpRequest
 
             // Set language not found page if language version is not available
             if (Sitecore.Context.Item != null &&
-                !Sitecore.Context.PageMode.IsPageEditor &&
+                !Sitecore.Context.PageMode.IsExperienceEditor &&
                 Sitecore.Context.Site.Name != "shell" &&
                 (System.Web.HttpContext.Current.Request.ServerVariables["SCRIPT_NAME"] != "/default.aspx" || 
                 Sitecore.Web.WebUtil.GetRawUrl() == "/" + Sitecore.Context.Language))
