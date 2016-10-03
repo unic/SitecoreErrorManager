@@ -12,8 +12,6 @@
 
 #endregion
 
-using Sitecore.Analytics;
-
 namespace Unic.ErrorManager.Core.Controls
 {
     using System;
@@ -23,9 +21,11 @@ namespace Unic.ErrorManager.Core.Controls
     using System.Security.Cryptography.X509Certificates;
     using System.Web;
 
+    using Sitecore.Analytics;
     using Sitecore.Configuration;
     using Sitecore.Data.Items;
     using Sitecore.Data.Managers;
+    using Sitecore.Exceptions;
     using Sitecore.Globalization;
     using Sitecore.Links;
     using Sitecore.Sites;
@@ -45,6 +45,8 @@ namespace Unic.ErrorManager.Core.Controls
     {
         #region Members
 
+        private const string AuthorizationHeader = "Authorization";
+
         private string _settingsKey = string.Empty;
 
         /// <summary>
@@ -55,10 +57,7 @@ namespace Unic.ErrorManager.Core.Controls
         /// </value>
         protected string SettingsKey
         {
-            get
-            {
-                return this._settingsKey;
-            }
+            get { return this._settingsKey; }
             set
             {
                 string key = Sitecore.Web.WebUtil.GetSafeQueryString("key");
@@ -79,11 +78,7 @@ namespace Unic.ErrorManager.Core.Controls
         /// <value>
         /// The status code.
         /// </value>
-        protected int StatusCode
-        {
-            get;
-            set;
-        }
+        protected int StatusCode { get; set; }
 
         #endregion
 
@@ -95,17 +90,19 @@ namespace Unic.ErrorManager.Core.Controls
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-            
+
             // initial parameters
             Language lang = UrlUtil.ResolveLanguage();
             SiteContext site = UrlUtil.ResolveSite(lang);
             string url = string.Empty;
 
             // Use the static error page if the site or the database is not available
-            if (site == null || site.Database == null) {
-                url = Sitecore.Web.WebUtil.GetServerUrl() + Sitecore.Configuration.Settings.GetSetting(this.SettingsKey + ".Static");
+            if (site == null || site.Database == null)
+            {
+                url = Sitecore.Web.WebUtil.GetServerUrl() + Settings.GetSetting(this.SettingsKey + ".Static");
             }
-            else {
+            else
+            {
                 string availableLanguages = site.Properties["availableLanguages"];
 
                 // general options for generating url
@@ -117,8 +114,11 @@ namespace Unic.ErrorManager.Core.Controls
                 options.AlwaysIncludeServerUrl = true;
 
                 // get the error item
-                string path = Settings.GetBoolSetting("ErrorManager.UseRootPath", false) ? site.RootPath : site.StartPath;
-                Item item = site.Database.GetItem(path + Sitecore.Configuration.Settings.GetSetting(this.SettingsKey + ".Item"));
+                string path = Settings.GetBoolSetting("ErrorManager.UseRootPath", false)
+                    ? site.RootPath
+                    : site.StartPath;
+                Item item =
+                    site.Database.GetItem(path + Sitecore.Configuration.Settings.GetSetting(this.SettingsKey + ".Item"));
 
                 // resolve the url for the error page
                 if (item != null && item.HasLanguageVersion(lang, availableLanguages))
@@ -127,7 +127,10 @@ namespace Unic.ErrorManager.Core.Controls
                 }
                 else
                 {
-                    Language.TryParse(!string.IsNullOrEmpty(site.Properties["language"]) ? site.Properties["language"] : LanguageManager.DefaultLanguage.Name, out lang);
+                    Language.TryParse(
+                        !string.IsNullOrEmpty(site.Properties["language"])
+                            ? site.Properties["language"]
+                            : LanguageManager.DefaultLanguage.Name, out lang);
                     if (item != null && lang != null && item.HasLanguageVersion(lang, availableLanguages))
                     {
                         options.Language = lang;
@@ -135,7 +138,7 @@ namespace Unic.ErrorManager.Core.Controls
                     }
                     else
                     {
-                        url = Sitecore.Web.WebUtil.GetServerUrl() + Sitecore.Configuration.Settings.GetSetting(this.SettingsKey + ".Static");
+                        url = Sitecore.Web.WebUtil.GetServerUrl() + Settings.GetSetting(this.SettingsKey + ".Static");
                     }
                 }
 
@@ -145,58 +148,38 @@ namespace Unic.ErrorManager.Core.Controls
             }
 
             // parse the page
-            HttpWebRequest request = (HttpWebRequest)HttpWebRequest.Create(url);
-            bool ignoreInvalidSSLCertificates = Sitecore.Configuration.Settings.GetBoolSetting("ErrorManager.IgnoreInvalidSSLCertificates", false);
+            HttpWebRequest request = (HttpWebRequest) HttpWebRequest.Create(url);
 
             // add user cookies to the request
-            if (Sitecore.Configuration.Settings.GetBoolSetting("ErrorManager.SendClientCookies", false))
+            if (Settings.GetBoolSetting("ErrorManager.SendClientCookies", false))
             {
-                request.CookieContainer = new CookieContainer();
-                HttpCookieCollection userCookies = this.Request.Cookies;
-                for (int userCookieCount = 0; userCookieCount < userCookies.Count; userCookieCount++)
-                {
-                    HttpCookie httpCookie = userCookies.Get(userCookieCount);
-                    if (httpCookie.Name != "ASP.NET_SessionId")
-                    {
-                        Cookie cookie = new Cookie();
-                        /*  We have to add the target host because the cookie does not contain the domain information.
-                            In this case, this behaviour is not a security issue, because the target is our own platform.
-                            Further informations: http://stackoverflow.com/a/460990 
-                        */
-                        cookie.Domain = request.RequestUri.Host;
-                        cookie.Expires = httpCookie.Expires;
-                        cookie.Name = httpCookie.Name;
-                        cookie.Path = httpCookie.Path;
-                        cookie.Secure = httpCookie.Secure;
-                        cookie.Value = httpCookie.Value;
-
-                        request.CookieContainer.Add(cookie);
-                    }
-                }
+                this.AddRequestCookies(request);
             }
 
+            // basic authentication handling
+            this.HandleBasicAuthentication(request);
+            
             HttpWebResponse response = null;
             bool hasAddedValidationCallback = false;
 
             try
             {
-                int timeout = 0;
-                Int32.TryParse(Sitecore.Configuration.Settings.GetSetting("ErrorManager.Timeout"), out timeout);
+                var timeout = Settings.GetIntSetting("ErrorManager.Timeout", 0);
                 if (timeout == 0)
                 {
                     timeout = 60*1000;
                 }
 
-                int maxRedirects = 0;
-                Int32.TryParse(Sitecore.Configuration.Settings.GetSetting("ErrorManager.MaxRedirects"), out maxRedirects);
+                var maxRedirects = Settings.GetIntSetting("ErrorManager.MaxRedirects", 0);
                 if (maxRedirects == 0)
                 {
                     maxRedirects = 3;
                 }
 
-                if (ignoreInvalidSSLCertificates)
+                if (Settings.GetBoolSetting("ErrorManager.IgnoreInvalidSSLCertificates", false))
                 {
-                    ServicePointManager.ServerCertificateValidationCallback += new RemoteCertificateValidationCallback(ValidateRemoteCertificate);
+                    ServicePointManager.ServerCertificateValidationCallback +=
+                        new RemoteCertificateValidationCallback(ValidateRemoteCertificate);
                     hasAddedValidationCallback = true;
                 }
 
@@ -215,7 +198,8 @@ namespace Unic.ErrorManager.Core.Controls
                 // Remove the custom RemoteCertificateValidationCallback due to the global nature of the ServicePointManager
                 if (hasAddedValidationCallback)
                 {
-                    ServicePointManager.ServerCertificateValidationCallback -= new RemoteCertificateValidationCallback(ValidateRemoteCertificate);
+                    ServicePointManager.ServerCertificateValidationCallback -=
+                        new RemoteCertificateValidationCallback(ValidateRemoteCertificate);
                 }
             }
 
@@ -228,7 +212,10 @@ namespace Unic.ErrorManager.Core.Controls
                 // This is a hotfix for a Sitecore bug, see Sitecore issue #378950
                 if (Settings.GetBoolSetting("Xdb.Enabled", false) && site.Tracking().EnableTracking)
                 {
-                    body = body.Replace("</body>", string.Format("<img src=\"{0}?{1}\" height=\"1\" width=\"1\" border=\"0\"></body>", Sitecore.Configuration.Settings.GetSetting(this.SettingsKey + ".Static"), base.Request.QueryString));
+                    body = body.Replace("</body>",
+                        string.Format("<img src=\"{0}?{1}\" height=\"1\" width=\"1\" border=\"0\"></body>",
+                            Settings.GetSetting(this.SettingsKey + ".Static"),
+                            base.Request.QueryString));
                 }
 
                 this.Response.Write(body);
@@ -237,7 +224,7 @@ namespace Unic.ErrorManager.Core.Controls
             {
                 this.Response.Write("Statuscode: " + this.StatusCode);
             }
-            
+
             // set statuscode
             if (this.StatusCode > 0)
             {
@@ -247,6 +234,67 @@ namespace Unic.ErrorManager.Core.Controls
             // pass through the response we create here
             this.Response.TrySkipIisCustomErrors = true;
         }
+
+        protected virtual NetworkCredential GetBasicAuthenticationCredentials()
+        {
+            var username = Settings.GetSetting("ErrorManager.BasicAuthentication.Username");
+            var password = Settings.GetSetting("ErrorManager.BasicAuthentication.Password");
+
+            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
+            {
+                throw new ConfigurationException("The username and/or password for using Basic Authentication is not defined in the settings");
+            }
+
+            return new NetworkCredential(username, password);
+        }
+
+        private void HandleBasicAuthentication(HttpWebRequest request)
+        {
+            if (!Settings.GetBoolSetting("ErrorManager.BasicAuthentication.Enabled", false)) return;
+
+            var authorizationHeaderSet = false;
+            if (Settings.GetBoolSetting("ErrorManager.BasicAuthentication.ForwardHeader", false))
+            {
+                if (!string.IsNullOrEmpty(this.Request.Headers[AuthorizationHeader]))
+                {
+                    request.Headers.Add(AuthorizationHeader, this.Request.Headers[AuthorizationHeader]);
+                    authorizationHeaderSet = true;
+                }
+            }
+
+            if (!authorizationHeaderSet)
+            {
+                request.Credentials = this.GetBasicAuthenticationCredentials();
+            }
+        }
+
+        private void AddRequestCookies(HttpWebRequest request)
+        {
+            request.CookieContainer = new CookieContainer();
+            HttpCookieCollection userCookies = this.Request.Cookies;
+            for (int userCookieCount = 0; userCookieCount < userCookies.Count; userCookieCount++)
+            {
+                HttpCookie httpCookie = userCookies.Get(userCookieCount);
+                if (httpCookie.Name != "ASP.NET_SessionId")
+                {
+                    Cookie cookie = new Cookie();
+                    /*  We have to add the target host because the cookie does not contain the domain information.
+                        In this case, this behaviour is not a security issue, because the target is our own platform.
+                        Further informations: http://stackoverflow.com/a/460990 
+                    */
+                    cookie.Domain = request.RequestUri.Host;
+                    cookie.Expires = httpCookie.Expires;
+                    cookie.Name = httpCookie.Name;
+                    cookie.Path = httpCookie.Path;
+                    cookie.Secure = httpCookie.Secure;
+                    cookie.Value = httpCookie.Value;
+
+                    request.CookieContainer.Add(cookie);
+                }
+            }
+        }
+
+        
 
         /// <summary>
         /// Validates the remote certificate without regarding the validity of it.
