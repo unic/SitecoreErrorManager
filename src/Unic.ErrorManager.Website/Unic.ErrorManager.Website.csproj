@@ -98,7 +98,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Config\Include\Unic.ErrorManager.config">
+    <Content Include="App_Config\Include\01_modules\Unic.ErrorManager.config">
       <SubType>Designer</SubType>
     </Content>
     <Content Include="sitecore modules\Web\Error Manager\403.aspx" />
