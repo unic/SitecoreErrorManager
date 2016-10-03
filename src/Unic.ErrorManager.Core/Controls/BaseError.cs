@@ -294,8 +294,6 @@ namespace Unic.ErrorManager.Core.Controls
             }
         }
 
-        
-
         /// <summary>
         /// Validates the remote certificate without regarding the validity of it.
         /// </summary>
