@@ -154,6 +154,9 @@ namespace Unic.ErrorManager.Core.Controls
                 this.AddRequestCookies(request);
             }
 
+            // handle header forwarding
+            this.HandleHeaderForwarding(request);
+
             // basic authentication handling
             this.HandleBasicAuthentication(request);
             
@@ -244,6 +247,20 @@ namespace Unic.ErrorManager.Core.Controls
             }
 
             return new NetworkCredential(username, password);
+        }
+
+        private void HandleHeaderForwarding(HttpWebRequest request)
+        {
+            var headers = Settings.GetSetting("ErrorManager.ForwardedHeaders");
+            if (string.IsNullOrWhiteSpace(headers)) return;
+
+            foreach (var header in headers.Split('|'))
+            {
+                if (this.Request.Headers[header] != null)
+                {
+                    request.Headers.Add(header, this.Request.Headers[header]);
+                }
+            }
         }
 
         private void HandleBasicAuthentication(HttpWebRequest request)
