@@ -45,8 +45,6 @@ namespace Unic.ErrorManager.Core.Controls
     {
         #region Members
 
-        private const string AuthorizationHeader = "Authorization";
-
         private string _settingsKey = string.Empty;
 
         /// <summary>
@@ -252,20 +250,7 @@ namespace Unic.ErrorManager.Core.Controls
         {
             if (!Settings.GetBoolSetting("ErrorManager.BasicAuthentication.Enabled", false)) return;
 
-            var authorizationHeaderSet = false;
-            if (Settings.GetBoolSetting("ErrorManager.BasicAuthentication.ForwardHeader", false))
-            {
-                if (!string.IsNullOrEmpty(this.Request.Headers[AuthorizationHeader]))
-                {
-                    request.Headers.Add(AuthorizationHeader, this.Request.Headers[AuthorizationHeader]);
-                    authorizationHeaderSet = true;
-                }
-            }
-
-            if (!authorizationHeaderSet)
-            {
-                request.Credentials = this.GetBasicAuthenticationCredentials();
-            }
+            request.Credentials = this.GetBasicAuthenticationCredentials();
         }
 
         private void AddRequestCookies(HttpWebRequest request)
