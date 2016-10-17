@@ -285,8 +285,10 @@ namespace Unic.ErrorManager.Core.Controls
             request.CookieContainer = new CookieContainer();
             var requestCookies = this.Request.Cookies;
 
-            foreach (HttpCookie requestCookie in requestCookies)
+            for (var cookieCounter = 0; cookieCounter < requestCookies.Count; cookieCounter++)
             {
+                var requestCookie = requestCookies.Get(cookieCounter);
+
                 // Ignore all excluded cookies
                 if (excludedCookieNames.Contains(requestCookie.Name)) continue;
 
