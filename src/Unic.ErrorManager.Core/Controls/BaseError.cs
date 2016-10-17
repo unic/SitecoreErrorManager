@@ -12,6 +12,8 @@
 
 #endregion
 
+using System.Linq;
+
 namespace Unic.ErrorManager.Core.Controls
 {
     using System;
@@ -143,6 +145,10 @@ namespace Unic.ErrorManager.Core.Controls
                 // append current raw url
                 url += url.IndexOf("?") == -1 ? "?" : "&";
                 url += "rawUrl=" + this.Server.UrlEncode(Sitecore.Web.WebUtil.GetRawUrl());
+
+                // add the tracking disable parameter
+                url += string.Format("&{0}={1}", Definitions.Constants.DisableTrackingParameterName,
+                    Settings.GetSetting(Definitions.Constants.DisableTrackingParameterValueSetting, string.Empty));
             }
 
             // parse the page
@@ -272,27 +278,35 @@ namespace Unic.ErrorManager.Core.Controls
 
         private void AddRequestCookies(HttpWebRequest request)
         {
-            request.CookieContainer = new CookieContainer();
-            HttpCookieCollection userCookies = this.Request.Cookies;
-            for (int userCookieCount = 0; userCookieCount < userCookies.Count; userCookieCount++)
-            {
-                HttpCookie httpCookie = userCookies.Get(userCookieCount);
-                if (httpCookie.Name != "ASP.NET_SessionId")
-                {
-                    Cookie cookie = new Cookie();
-                    /*  We have to add the target host because the cookie does not contain the domain information.
-                        In this case, this behaviour is not a security issue, because the target is our own platform.
-                        Further informations: http://stackoverflow.com/a/460990 
-                    */
-                    cookie.Domain = request.RequestUri.Host;
-                    cookie.Expires = httpCookie.Expires;
-                    cookie.Name = httpCookie.Name;
-                    cookie.Path = httpCookie.Path;
-                    cookie.Secure = httpCookie.Secure;
-                    cookie.Value = httpCookie.Value;
+            var excludedCookieNames =
+                Settings.GetSetting("ErrorManager.ExcludedCookies", "ASP.NET_SessionId")
+                    .Split(new[] {'|'}, StringSplitOptions.RemoveEmptyEntries);
 
-                    request.CookieContainer.Add(cookie);
-                }
+            request.CookieContainer = new CookieContainer();
+            var requestCookies = this.Request.Cookies;
+
+            for (var cookieCounter = 0; cookieCounter < requestCookies.Count; cookieCounter++)
+            {
+                var requestCookie = requestCookies.Get(cookieCounter);
+
+                // Ignore all excluded cookies
+                if (excludedCookieNames.Contains(requestCookie.Name)) continue;
+
+                var forwardedCookie = new Cookie
+                {
+                    /*  We have to add the target host because the cookie does not contain the domain information.
+                    In this case, this behaviour is not a security issue, because the target is our own platform.
+                    Further informations: http://stackoverflow.com/a/460990 
+                    */
+                    Domain = request.RequestUri.Host,
+                    Expires = requestCookie.Expires,
+                    Name = requestCookie.Name,
+                    Path = requestCookie.Path,
+                    Secure = requestCookie.Secure,
+                    Value = requestCookie.Value
+                };
+                
+                request.CookieContainer.Add(forwardedCookie);
             }
         }
 
