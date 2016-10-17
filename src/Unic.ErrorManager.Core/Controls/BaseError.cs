@@ -145,6 +145,10 @@ namespace Unic.ErrorManager.Core.Controls
                 // append current raw url
                 url += url.IndexOf("?") == -1 ? "?" : "&";
                 url += "rawUrl=" + this.Server.UrlEncode(Sitecore.Web.WebUtil.GetRawUrl());
+
+                // add the tracking disable parameter
+                url += string.Format("&{0}={1}", Definitions.Constants.DisableTrackingParameterName,
+                    Settings.GetSetting(Definitions.Constants.DisableTrackingParameterValueSetting, string.Empty));
             }
 
             // parse the page
