@@ -13,7 +13,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Unic.ErrorManager.Website</RootNamespace>
     <AssemblyName>Unic.ErrorManager.Website</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <UseIISExpress>false</UseIISExpress>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
@@ -25,6 +25,7 @@
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
     <TargetFrameworkProfile />
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -53,9 +54,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Sitecore.Kernel">
-      <HintPath>..\..\packages\Sitecore.Kernel.6.6.140410.34\lib\Sitecore.Kernel.dll</HintPath>
-      <Private>False</Private>
+    <Reference Include="Sitecore.Kernel, Version=8.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Sitecore.Kernel.NoReferences.8.1.151207\lib\NET45\Sitecore.Kernel.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -97,7 +98,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Config\Include\Unic.ErrorManager.config">
+    <Content Include="App_Config\Include\01_modules\Unic.ErrorManager.config">
       <SubType>Designer</SubType>
     </Content>
     <Content Include="sitecore modules\Web\Error Manager\403.aspx" />
@@ -109,7 +110,7 @@
     <Content Include="sitecore modules\Web\Error Manager\service\notfound.aspx" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <Content Include="packages.config" />
     <None Include="Properties\PublishProfiles\LocalDeploy.pubxml" />
     <None Include="Unic.ErrorManager.Website.nuspec" />
   </ItemGroup>
