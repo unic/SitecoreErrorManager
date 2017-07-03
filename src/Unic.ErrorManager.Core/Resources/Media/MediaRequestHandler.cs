@@ -99,9 +99,8 @@ namespace Unic.ErrorManager.Core.Resources.Media
             // check item in language
             Item mediaItem = Sitecore.Context.Database.GetItem(mediaRequest.MediaUri.MediaPath);
             if (Sitecore.Context.GetSiteName() != "shell"
-                && (mediaItem == null
-                    || (!mediaItem.Fields["Blob"].Shared
-                        && !mediaItem.HasLanguageVersion(lang, Sitecore.Context.Site.Properties["availableLanguages"]))))
+                && (mediaItem?.Fields["Blob"] == null
+                || (!mediaItem.Fields["Blob"].Shared && !mediaItem.HasLanguageVersion(lang, Sitecore.Context.Site.Properties["availableLanguages"]))))
             {
                 notfound = true;
             }
