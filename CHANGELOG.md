@@ -1,3 +1,9 @@
+# 8.0.1
+
+- fix exception for items from Media Library not being a file, thus not having Blob field
+- handle other exceptions during media item check with "not found" result
+- add DotNetCompilerPlatform to enable C# 6 compilation on TemaCity
+
 # 8.0
 
 - integrate the new Sitecore NuGet feed and reference the relevant NuGet packages from there
