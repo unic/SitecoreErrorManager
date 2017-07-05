@@ -122,6 +122,11 @@ namespace Unic.ErrorManager.Core.Resources.Media
                     media = MediaManager.GetMedia(mediaRequest.MediaUri);
                 }
 
+                // this would not take an effect
+                // mediaItem is read above without security disabler
+                // null mediaItem implies true notfound
+                // and further notfound has priority over noaccess
+
                 if (media == null)
                 {
                     notfound = true;
