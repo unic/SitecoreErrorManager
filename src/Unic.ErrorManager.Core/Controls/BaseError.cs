@@ -11,17 +11,14 @@
 // along with this module. If not, see http://opensource.org/licenses/lgpl-3.0.
 
 #endregion
-
-using System.Linq;
-
 namespace Unic.ErrorManager.Core.Controls
 {
     using System;
     using System.IO;
+    using System.Linq;
     using System.Net;
     using System.Net.Security;
     using System.Security.Cryptography.X509Certificates;
-    using System.Web;
     using System.Text;
 
     using Sitecore.Analytics;
@@ -32,6 +29,7 @@ namespace Unic.ErrorManager.Core.Controls
     using Sitecore.Globalization;
     using Sitecore.Links;
     using Sitecore.Sites;
+    using Sitecore.Web;
 
     using Unic.ErrorManager.Core.Extensions;
     using Unic.ErrorManager.Core.Utilities;
@@ -98,7 +96,7 @@ namespace Unic.ErrorManager.Core.Controls
             StringBuilder url = null;
 
             // Use the static error page if the site or the database is not available
-            if (site == null || site.Database == null)
+            if (site?.Database == null)
             {
                 url = new StringBuilder(WebUtil.GetServerUrl() + Settings.GetSetting(this.SettingsKey + ".Static"));
             }
@@ -115,23 +113,17 @@ namespace Unic.ErrorManager.Core.Controls
                 options.AlwaysIncludeServerUrl = true;
 
                 // get the error item
-                string path = Settings.GetBoolSetting("ErrorManager.UseRootPath", false)
-                    ? site.RootPath
-                    : site.StartPath;
-                Item item =
-                    site.Database.GetItem(path + Sitecore.Configuration.Settings.GetSetting(this.SettingsKey + ".Item"));
+                string path = Settings.GetBoolSetting("ErrorManager.UseRootPath", false) ? site.RootPath : site.StartPath;
+                Item item = site.Database.GetItem(path + Settings.GetSetting(this.SettingsKey + ".Item"));
 
                 // resolve the url for the error page
-                if (item != null && item.HasLanguageVersion(lang, availableLanguages))
+                if (item?.HasLanguageVersion(lang, availableLanguages) == true)
                 {
                     url = new StringBuilder(LinkManager.GetItemUrl(item, options));
                 }
                 else
                 {
-                    Language.TryParse(
-                        !string.IsNullOrEmpty(site.Properties["language"])
-                            ? site.Properties["language"]
-                            : LanguageManager.DefaultLanguage.Name, out lang);
+                    Language.TryParse(!string.IsNullOrEmpty(site.Properties["language"]) ? site.Properties["language"] : LanguageManager.DefaultLanguage.Name, out lang);
                     if (item != null && lang != null && item.HasLanguageVersion(lang, availableLanguages))
                     {
                         options.Language = lang;
@@ -177,7 +169,7 @@ namespace Unic.ErrorManager.Core.Controls
                 var timeout = Settings.GetIntSetting("ErrorManager.Timeout", 0);
                 if (timeout == 0)
                 {
-                    timeout = 60*1000;
+                    timeout = 60 * 1000;
                 }
 
                 var maxRedirects = Settings.GetIntSetting("ErrorManager.MaxRedirects", 0);
@@ -188,28 +180,26 @@ namespace Unic.ErrorManager.Core.Controls
 
                 if (Settings.GetBoolSetting("ErrorManager.IgnoreInvalidSSLCertificates", false))
                 {
-                    ServicePointManager.ServerCertificateValidationCallback +=
-                        new RemoteCertificateValidationCallback(ValidateRemoteCertificate);
+                    ServicePointManager.ServerCertificateValidationCallback += ValidateRemoteCertificate;
                     hasAddedValidationCallback = true;
                 }
 
                 // do the request
                 request.Timeout = timeout;
                 request.MaximumAutomaticRedirections = maxRedirects;
-                response = (HttpWebResponse) request.GetResponse();
+                response = (HttpWebResponse)request.GetResponse();
             }
             catch (WebException ex)
             {
                 // we need to catch this, because statuscode of the sitecore default error pages may throwing an exception in the HttpWebResponse object
-                response = (HttpWebResponse) ex.Response;
+                response = (HttpWebResponse)ex.Response;
             }
             finally
             {
                 // Remove the custom RemoteCertificateValidationCallback due to the global nature of the ServicePointManager
                 if (hasAddedValidationCallback)
                 {
-                    ServicePointManager.ServerCertificateValidationCallback -=
-                        new RemoteCertificateValidationCallback(ValidateRemoteCertificate);
+                    ServicePointManager.ServerCertificateValidationCallback -= ValidateRemoteCertificate;
                 }
             }
 
@@ -283,7 +273,7 @@ namespace Unic.ErrorManager.Core.Controls
         {
             var excludedCookieNames =
                 Settings.GetSetting("ErrorManager.ExcludedCookies", "ASP.NET_SessionId")
-                    .Split(new[] {'|'}, StringSplitOptions.RemoveEmptyEntries);
+                    .Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
 
             request.CookieContainer = new CookieContainer();
             var requestCookies = this.Request.Cookies;
@@ -308,7 +298,7 @@ namespace Unic.ErrorManager.Core.Controls
                     Secure = requestCookie.Secure,
                     Value = requestCookie.Value
                 };
-                
+
                 request.CookieContainer.Add(forwardedCookie);
             }
         }
