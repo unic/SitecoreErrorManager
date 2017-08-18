@@ -22,6 +22,7 @@ namespace Unic.ErrorManager.Core.Controls
     using System.Net.Security;
     using System.Security.Cryptography.X509Certificates;
     using System.Web;
+    using System.Text;
 
     using Sitecore.Analytics;
     using Sitecore.Configuration;
@@ -94,12 +95,12 @@ namespace Unic.ErrorManager.Core.Controls
             // initial parameters
             Language lang = UrlUtil.ResolveLanguage();
             SiteContext site = UrlUtil.ResolveSite(lang);
-            string url = string.Empty;
+            StringBuilder url = null;
 
             // Use the static error page if the site or the database is not available
             if (site == null || site.Database == null)
             {
-                url = Sitecore.Web.WebUtil.GetServerUrl() + Settings.GetSetting(this.SettingsKey + ".Static");
+                url = new StringBuilder(WebUtil.GetServerUrl() + Settings.GetSetting(this.SettingsKey + ".Static"));
             }
             else
             {
@@ -123,7 +124,7 @@ namespace Unic.ErrorManager.Core.Controls
                 // resolve the url for the error page
                 if (item != null && item.HasLanguageVersion(lang, availableLanguages))
                 {
-                    url = LinkManager.GetItemUrl(item, options);
+                    url = new StringBuilder(LinkManager.GetItemUrl(item, options));
                 }
                 else
                 {
@@ -134,25 +135,27 @@ namespace Unic.ErrorManager.Core.Controls
                     if (item != null && lang != null && item.HasLanguageVersion(lang, availableLanguages))
                     {
                         options.Language = lang;
-                        url = LinkManager.GetItemUrl(item, options);
+                        url = new StringBuilder(LinkManager.GetItemUrl(item, options));
                     }
                     else
                     {
-                        url = Sitecore.Web.WebUtil.GetServerUrl() + Settings.GetSetting(this.SettingsKey + ".Static");
+                        url = new StringBuilder(WebUtil.GetServerUrl() + Settings.GetSetting(this.SettingsKey + ".Static"));
                     }
                 }
 
                 // append current raw url
-                url += url.IndexOf("?") == -1 ? "?" : "&";
-                url += "rawUrl=" + this.Server.UrlEncode(Sitecore.Web.WebUtil.GetRawUrl());
+                url.Append(url.ToString().IndexOf("?") == -1 ? "?" : "&");
+                url.Append("rawUrl=" + this.Server.UrlEncode(WebUtil.GetRawUrl()));
 
                 // add the tracking disable parameter
-                url += string.Format("&{0}={1}", Definitions.Constants.DisableTrackingParameterName,
-                    Settings.GetSetting(Definitions.Constants.DisableTrackingParameterValueSetting, string.Empty));
+                url.Append(string.Format("&{0}={1}", Definitions.Constants.DisableTrackingParameterName, Settings.GetSetting(Definitions.Constants.DisableTrackingParameterValueSetting, string.Empty)));
+
+                // change display mode to normal
+                url.Append(string.Format("&{0}={1}", Definitions.Constants.DisplayModeParameterName, Definitions.Constants.DisplayModeParameterValueSetting));
             }
 
             // parse the page
-            HttpWebRequest request = (HttpWebRequest) HttpWebRequest.Create(url);
+            HttpWebRequest request = (HttpWebRequest)HttpWebRequest.Create(url.ToString());
 
             // add user cookies to the request
             if (Settings.GetBoolSetting("ErrorManager.SendClientCookies", false))
