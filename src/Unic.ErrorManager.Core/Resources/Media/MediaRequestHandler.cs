@@ -127,15 +127,6 @@ namespace Unic.ErrorManager.Core.Resources.Media
             // generate redirect url
             if (notfound)
             {
-                var staticContent = Sitecore.Configuration.Settings.GetSetting("MediaNotFound.StaticContent");
-                if (!string.IsNullOrEmpty(staticContent))
-                {
-                    context.Response.Clear();
-                    context.Response.Write(staticContent);
-                    context.Response.TrySkipIisCustomErrors = true;
-                    return false;
-                }
-
                 redirect = Sitecore.Configuration.Settings.ItemNotFoundUrl;
             }
             else if (noaccess)
