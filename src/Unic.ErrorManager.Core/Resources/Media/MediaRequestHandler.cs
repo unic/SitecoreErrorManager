@@ -141,10 +141,12 @@ namespace Unic.ErrorManager.Core.Resources.Media
             {
                 if (Sitecore.Configuration.Settings.RequestErrors.UseServerSideRedirect)
                 {
+                    HttpContext.Current.Items["IsMedia"] = "true";
                     HttpContext.Current.Server.Transfer(redirect);
                 }
                 else
                 {
+                    Sitecore.Web.WebUtil.AddQueryString(redirect, "IsMedia", "true");
                     HttpContext.Current.Response.Redirect(redirect);
                 }
 

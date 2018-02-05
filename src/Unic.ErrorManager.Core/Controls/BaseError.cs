@@ -90,14 +90,14 @@ namespace Unic.ErrorManager.Core.Controls
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-
+            var isUsingStatic = Sitecore.Configuration.Settings.GetBoolSetting(SettingsKey + ".UseStatic", false);
             // initial parameters
             Language lang = UrlUtil.ResolveLanguage();
             SiteContext site = UrlUtil.ResolveSite(lang);
             string url = string.Empty;
 
             // Use the static error page if the site or the database is not available
-            if (site == null || site.Database == null)
+            if (isUsingStatic || site == null || site.Database == null)
             {
                 url = Sitecore.Web.WebUtil.GetServerUrl() + Settings.GetSetting(this.SettingsKey + ".Static");
             }
