@@ -31,7 +31,10 @@ namespace Unic.ErrorManager.Website.sitecore_modules.Web.Error_Manager
         protected override void OnLoad(EventArgs e)
         {
             // set properties
-            base.SettingsKey = "ItemNotFoundUrl";
+            var isMedia = Context.Items.Contains("IsMedia")
+                ? Convert.ToBoolean(Context.Items["IsMedia"])
+                : Sitecore.Web.WebUtil.GetItemsBool("IsMedia", false);
+            base.SettingsKey = isMedia ? "MediaNotFoundUrl" : "ItemNotFoundUrl";
             base.StatusCode = 404;
 
             // go
