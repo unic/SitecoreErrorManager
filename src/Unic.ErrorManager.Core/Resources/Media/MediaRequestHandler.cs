@@ -127,15 +127,6 @@ namespace Unic.ErrorManager.Core.Resources.Media
             // generate redirect url
             if (notfound)
             {
-                var staticContent = Sitecore.Configuration.Settings.GetSetting("MediaNotFound.StaticContent");
-                if (!string.IsNullOrEmpty(staticContent))
-                {
-                    context.Response.Clear();
-                    context.Response.Write(staticContent);
-                    context.Response.TrySkipIisCustomErrors = true;
-                    return false;
-                }
-
                 redirect = Sitecore.Configuration.Settings.GetSetting("MediaNotFoundUrl");
             }
             else if (noaccess)
@@ -150,10 +141,12 @@ namespace Unic.ErrorManager.Core.Resources.Media
             {
                 if (Sitecore.Configuration.Settings.RequestErrors.UseServerSideRedirect)
                 {
+                    HttpContext.Current.Items["IsMedia"] = "true";
                     HttpContext.Current.Server.Transfer(redirect);
                 }
                 else
                 {
+                    Sitecore.Web.WebUtil.AddQueryString(redirect, "IsMedia", "true");
                     HttpContext.Current.Response.Redirect(redirect);
                 }
 
