@@ -88,6 +88,9 @@ namespace Unic.ErrorManager.Core.Controls
         /// <param name="e">The <see cref="T:System.EventArgs"/> object that contains the event data.</param>
         protected override void OnLoad(EventArgs e)
         {
+            // add support to all versions of tls
+            ServicePointManager.SecurityProtocol = ServicePointManager.SecurityProtocol | SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
+            
             base.OnLoad(e);
 
             // initial parameters
@@ -144,6 +147,17 @@ namespace Unic.ErrorManager.Core.Controls
 
                 // change display mode to normal
                 url.Append(string.Format("&{0}={1}", Definitions.Constants.DisplayModeParameterName, Definitions.Constants.DisplayModeParameterValueSetting));
+            }
+
+            // if path to the target error page is same as requested path, probably we are in the infinite loop, use LayoutNotFoundUrl.Static if defined  
+            if (new Uri(url.ToString()).AbsolutePath == new Uri(WebUtil.GetServerUrl() + WebUtil.GetRawUrl()).AbsolutePath)
+            {
+                var static500 = Settings.GetSetting("LayoutNotFoundUrl.Static");
+
+                if (!string.IsNullOrWhiteSpace(static500))
+                {
+                    url = new StringBuilder(Uri.IsWellFormedUriString(static500, UriKind.Absolute) ? static500 : WebUtil.GetServerUrl() + static500);
+                }
             }
 
             // parse the page
