@@ -1,3 +1,8 @@
+# 8.0.3
+
+- suppress infinite loop by checking target URL and requested ones, if "AbsolutePath" is same, go to layout static page
+- add support to all versions of TLS
+
 # 8.0.2
 
 - fix many sessions problem caused by edit mode, which prevented users from logging in

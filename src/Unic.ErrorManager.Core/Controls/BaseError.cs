@@ -152,11 +152,11 @@ namespace Unic.ErrorManager.Core.Controls
             // if path to the target error page is same as requested path, probably we are in the infinite loop, use LayoutNotFoundUrl.Static if defined  
             if (new Uri(url.ToString()).AbsolutePath == new Uri(WebUtil.GetServerUrl() + WebUtil.GetRawUrl()).AbsolutePath)
             {
-                var static500 = Settings.GetSetting("LayoutNotFoundUrl.Static");
+                var layoutNotFoundUrlStatic = Settings.GetSetting("LayoutNotFoundUrl.Static");
 
-                if (!string.IsNullOrWhiteSpace(static500))
+                if (!string.IsNullOrWhiteSpace(layoutNotFoundUrlStatic))
                 {
-                    url = new StringBuilder(Uri.IsWellFormedUriString(static500, UriKind.Absolute) ? static500 : WebUtil.GetServerUrl() + static500);
+                    url = new StringBuilder(Uri.IsWellFormedUriString(layoutNotFoundUrlStatic, UriKind.Absolute) ? layoutNotFoundUrlStatic : WebUtil.GetServerUrl() + layoutNotFoundUrlStatic);
                 }
             }
 
