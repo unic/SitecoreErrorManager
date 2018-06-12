@@ -14,6 +14,9 @@
 
 #endregion
 
+using System;
+using Unic.ErrorManager.Core.Definitions;
+
 namespace Unic.ErrorManager.Core.Resources.Media
 {
     using System.Web;
@@ -91,17 +94,23 @@ namespace Unic.ErrorManager.Core.Resources.Media
             bool noaccess = false;
 
             string redirect = string.Empty;
-            Language lang = UrlUtil.ResolveLanguage();
 
             // get media
-            Sitecore.Resources.Media.Media media = MediaManager.GetMedia(mediaRequest.MediaUri);
+            Media media = MediaManager.GetMedia(mediaRequest.MediaUri);
 
-            // check item in language
-            Item mediaItem = Sitecore.Context.Database.GetItem(mediaRequest.MediaUri.MediaPath);
-            if (Sitecore.Context.GetSiteName() != "shell"
-                && (mediaItem == null
-                    || (!mediaItem.Fields["Blob"].Shared
-                        && !mediaItem.HasLanguageVersion(lang, Sitecore.Context.Site.Properties["availableLanguages"]))))
+            try
+            {
+                Language lang = UrlUtil.ResolveLanguage();
+                // check item in language
+                Item mediaItem = Sitecore.Context.Database.GetItem(mediaRequest.MediaUri.MediaPath);
+                if (Sitecore.Context.GetSiteName() != "shell"
+                    && (mediaItem?.Fields["Blob"] == null
+                        || (!mediaItem.Fields["Blob"].Shared && !mediaItem.HasLanguageVersion(lang, Sitecore.Context.Site.Properties["availableLanguages"]))))
+                {
+                    notfound = true;
+                }
+            }
+            catch (Exception)
             {
                 notfound = true;
             }
@@ -113,6 +122,11 @@ namespace Unic.ErrorManager.Core.Resources.Media
                 {
                     media = MediaManager.GetMedia(mediaRequest.MediaUri);
                 }
+
+                // this would not take an effect
+                // mediaItem is read above without security disabler
+                // null mediaItem implies true notfound
+                // and further notfound has priority over noaccess
 
                 if (media == null)
                 {
@@ -141,10 +155,12 @@ namespace Unic.ErrorManager.Core.Resources.Media
             {
                 if (Sitecore.Configuration.Settings.RequestErrors.UseServerSideRedirect)
                 {
+                    HttpContext.Current.Items[Constants.IsMediaParameterName] = true;
                     HttpContext.Current.Server.Transfer(redirect);
                 }
                 else
                 {
+                    Sitecore.Web.WebUtil.AddQueryString(redirect, Constants.IsMediaParameterName, bool.TrueString);
                     HttpContext.Current.Response.Redirect(redirect);
                 }
 

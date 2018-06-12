@@ -11,17 +11,15 @@
 // along with this module. If not, see http://opensource.org/licenses/lgpl-3.0.
 
 #endregion
-
-using System.Linq;
-
 namespace Unic.ErrorManager.Core.Controls
 {
     using System;
     using System.IO;
+    using System.Linq;
     using System.Net;
     using System.Net.Security;
     using System.Security.Cryptography.X509Certificates;
-    using System.Web;
+    using System.Text;
 
     using Sitecore.Analytics;
     using Sitecore.Configuration;
@@ -31,6 +29,7 @@ namespace Unic.ErrorManager.Core.Controls
     using Sitecore.Globalization;
     using Sitecore.Links;
     using Sitecore.Sites;
+    using Sitecore.Web;
 
     using Unic.ErrorManager.Core.Extensions;
     using Unic.ErrorManager.Core.Utilities;
@@ -89,17 +88,20 @@ namespace Unic.ErrorManager.Core.Controls
         /// <param name="e">The <see cref="T:System.EventArgs"/> object that contains the event data.</param>
         protected override void OnLoad(EventArgs e)
         {
+            // add support to all versions of tls
+            ServicePointManager.SecurityProtocol = ServicePointManager.SecurityProtocol | SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
+            
             base.OnLoad(e);
-
+            var isUsingStatic = Sitecore.Configuration.Settings.GetBoolSetting(SettingsKey + ".UseStatic", false);
             // initial parameters
             Language lang = UrlUtil.ResolveLanguage();
             SiteContext site = UrlUtil.ResolveSite(lang);
-            string url = string.Empty;
+            StringBuilder url = null;
 
             // Use the static error page if the site or the database is not available
-            if (site == null || site.Database == null)
+            if (isUsingStatic || site?.Database == null)
             {
-                url = Sitecore.Web.WebUtil.GetServerUrl() + Settings.GetSetting(this.SettingsKey + ".Static");
+                url = new StringBuilder(WebUtil.GetServerUrl() + Settings.GetSetting(this.SettingsKey + ".Static"));
             }
             else
             {
@@ -114,45 +116,52 @@ namespace Unic.ErrorManager.Core.Controls
                 options.AlwaysIncludeServerUrl = true;
 
                 // get the error item
-                string path = Settings.GetBoolSetting("ErrorManager.UseRootPath", false)
-                    ? site.RootPath
-                    : site.StartPath;
-                Item item =
-                    site.Database.GetItem(path + Sitecore.Configuration.Settings.GetSetting(this.SettingsKey + ".Item"));
+                string path = Settings.GetBoolSetting("ErrorManager.UseRootPath", false) ? site.RootPath : site.StartPath;
+                Item item = site.Database.GetItem(path + Settings.GetSetting(this.SettingsKey + ".Item"));
 
                 // resolve the url for the error page
-                if (item != null && item.HasLanguageVersion(lang, availableLanguages))
+                if (item?.HasLanguageVersion(lang, availableLanguages) == true)
                 {
-                    url = LinkManager.GetItemUrl(item, options);
+                    url = new StringBuilder(LinkManager.GetItemUrl(item, options));
                 }
                 else
                 {
-                    Language.TryParse(
-                        !string.IsNullOrEmpty(site.Properties["language"])
-                            ? site.Properties["language"]
-                            : LanguageManager.DefaultLanguage.Name, out lang);
+                    Language.TryParse(!string.IsNullOrEmpty(site.Properties["language"]) ? site.Properties["language"] : LanguageManager.DefaultLanguage.Name, out lang);
                     if (item != null && lang != null && item.HasLanguageVersion(lang, availableLanguages))
                     {
                         options.Language = lang;
-                        url = LinkManager.GetItemUrl(item, options);
+                        url = new StringBuilder(LinkManager.GetItemUrl(item, options));
                     }
                     else
                     {
-                        url = Sitecore.Web.WebUtil.GetServerUrl() + Settings.GetSetting(this.SettingsKey + ".Static");
+                        url = new StringBuilder(WebUtil.GetServerUrl() + Settings.GetSetting(this.SettingsKey + ".Static"));
                     }
                 }
 
                 // append current raw url
-                url += url.IndexOf("?") == -1 ? "?" : "&";
-                url += "rawUrl=" + this.Server.UrlEncode(Sitecore.Web.WebUtil.GetRawUrl());
+                url.Append(url.ToString().IndexOf("?") == -1 ? "?" : "&");
+                url.Append("rawUrl=" + this.Server.UrlEncode(WebUtil.GetRawUrl()));
 
                 // add the tracking disable parameter
-                url += string.Format("&{0}={1}", Definitions.Constants.DisableTrackingParameterName,
-                    Settings.GetSetting(Definitions.Constants.DisableTrackingParameterValueSetting, string.Empty));
+                url.Append(string.Format("&{0}={1}", Definitions.Constants.DisableTrackingParameterName, Settings.GetSetting(Definitions.Constants.DisableTrackingParameterValueSetting, string.Empty)));
+
+                // change display mode to normal
+                url.Append(string.Format("&{0}={1}", Definitions.Constants.DisplayModeParameterName, Definitions.Constants.DisplayModeParameterValueSetting));
+            }
+
+            // if path to the target error page is same as requested path, probably we are in the infinite loop, use LayoutNotFoundUrl.Static if defined  
+            if (new Uri(url.ToString()).AbsolutePath == new Uri(WebUtil.GetServerUrl() + WebUtil.GetRawUrl()).AbsolutePath)
+            {
+                var layoutNotFoundUrlStatic = Settings.GetSetting("LayoutNotFoundUrl.Static");
+
+                if (!string.IsNullOrWhiteSpace(layoutNotFoundUrlStatic))
+                {
+                    url = new StringBuilder(Uri.IsWellFormedUriString(layoutNotFoundUrlStatic, UriKind.Absolute) ? layoutNotFoundUrlStatic : WebUtil.GetServerUrl() + layoutNotFoundUrlStatic);
+                }
             }
 
             // parse the page
-            HttpWebRequest request = (HttpWebRequest) HttpWebRequest.Create(url);
+            HttpWebRequest request = (HttpWebRequest)HttpWebRequest.Create(url.ToString());
 
             // add user cookies to the request
             if (Settings.GetBoolSetting("ErrorManager.SendClientCookies", false))
@@ -174,7 +183,7 @@ namespace Unic.ErrorManager.Core.Controls
                 var timeout = Settings.GetIntSetting("ErrorManager.Timeout", 0);
                 if (timeout == 0)
                 {
-                    timeout = 60*1000;
+                    timeout = 60 * 1000;
                 }
 
                 var maxRedirects = Settings.GetIntSetting("ErrorManager.MaxRedirects", 0);
@@ -185,28 +194,26 @@ namespace Unic.ErrorManager.Core.Controls
 
                 if (Settings.GetBoolSetting("ErrorManager.IgnoreInvalidSSLCertificates", false))
                 {
-                    ServicePointManager.ServerCertificateValidationCallback +=
-                        new RemoteCertificateValidationCallback(ValidateRemoteCertificate);
+                    ServicePointManager.ServerCertificateValidationCallback += ValidateRemoteCertificate;
                     hasAddedValidationCallback = true;
                 }
 
                 // do the request
                 request.Timeout = timeout;
                 request.MaximumAutomaticRedirections = maxRedirects;
-                response = (HttpWebResponse) request.GetResponse();
+                response = (HttpWebResponse)request.GetResponse();
             }
             catch (WebException ex)
             {
                 // we need to catch this, because statuscode of the sitecore default error pages may throwing an exception in the HttpWebResponse object
-                response = (HttpWebResponse) ex.Response;
+                response = (HttpWebResponse)ex.Response;
             }
             finally
             {
                 // Remove the custom RemoteCertificateValidationCallback due to the global nature of the ServicePointManager
                 if (hasAddedValidationCallback)
                 {
-                    ServicePointManager.ServerCertificateValidationCallback -=
-                        new RemoteCertificateValidationCallback(ValidateRemoteCertificate);
+                    ServicePointManager.ServerCertificateValidationCallback -= ValidateRemoteCertificate;
                 }
             }
 
@@ -280,7 +287,7 @@ namespace Unic.ErrorManager.Core.Controls
         {
             var excludedCookieNames =
                 Settings.GetSetting("ErrorManager.ExcludedCookies", "ASP.NET_SessionId")
-                    .Split(new[] {'|'}, StringSplitOptions.RemoveEmptyEntries);
+                    .Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
 
             request.CookieContainer = new CookieContainer();
             var requestCookies = this.Request.Cookies;
@@ -305,7 +312,7 @@ namespace Unic.ErrorManager.Core.Controls
                     Secure = requestCookie.Secure,
                     Value = requestCookie.Value
                 };
-                
+
                 request.CookieContainer.Add(forwardedCookie);
             }
         }
