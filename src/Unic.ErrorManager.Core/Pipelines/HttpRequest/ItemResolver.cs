@@ -12,6 +12,10 @@
 
 #endregion
 
+using Sitecore;
+using Sitecore.Configuration;
+using Constants = Unic.ErrorManager.Core.Definitions.Constants;
+
 namespace Unic.ErrorManager.Core.Pipelines.HttpRequest
 {
     using Sitecore.Pipelines.HttpRequest;
@@ -36,6 +40,8 @@ namespace Unic.ErrorManager.Core.Pipelines.HttpRequest
         /// <param name="args">Http request arguments.</param>
         public override void Process(HttpRequestArgs args)
         {
+            System.Web.HttpContext.Current.Request.Headers.Add("user-agent", Settings.GetSetting(Constants.RedirectRequestBotSetting));
+
             if (Sitecore.Context.Item == null || Sitecore.Context.Database == null)
             {
                 return;

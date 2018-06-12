@@ -1,4 +1,6 @@
-﻿using Sitecore.Configuration;
+﻿using System;
+using Sitecore.Common;
+using Sitecore.Configuration;
 using Sitecore.Pipelines;
 using Sitecore.Web;
 using Unic.ErrorManager.Core.Definitions;
@@ -12,7 +14,13 @@ namespace Unic.ErrorManager.Core.Pipelines.StartAnalytics
     {
         public virtual void Process(PipelineArgs args)
         {
-            var disableTrackingValue = WebUtil.GetQueryString(Constants.DisableTrackingParameterName);
+            var disableTrackingValue = string.Empty;
+
+            if (Convert.ToBoolean(Settings.GetSetting(Constants.EnableDisableTrackingSetting)))
+            {
+                disableTrackingValue = WebUtil.GetQueryString(Constants.DisableTrackingParameterName);
+            }
+
             if (!string.IsNullOrEmpty(disableTrackingValue) 
                 && disableTrackingValue.Equals(Settings.GetSetting(Constants.DisableTrackingParameterValueSetting, string.Empty)))
             {

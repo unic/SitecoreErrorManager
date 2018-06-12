@@ -9,5 +9,9 @@
         public static string DisplayModeParameterName = "sc_mode";
 
         public static string DisplayModeParameterValueSetting = "normal";
+
+        public static string EnableDisableTrackingSetting = "EnableDisableTracking";
+
+        public static string RedirectRequestBotSetting = "EnableDisableTracking";
     }
 }
