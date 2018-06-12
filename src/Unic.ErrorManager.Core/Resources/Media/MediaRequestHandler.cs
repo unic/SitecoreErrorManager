@@ -15,6 +15,7 @@
 #endregion
 
 using System;
+using Unic.ErrorManager.Core.Definitions;
 
 namespace Unic.ErrorManager.Core.Resources.Media
 {
@@ -154,12 +155,12 @@ namespace Unic.ErrorManager.Core.Resources.Media
             {
                 if (Sitecore.Configuration.Settings.RequestErrors.UseServerSideRedirect)
                 {
-                    HttpContext.Current.Items["IsMedia"] = "true";
+                    HttpContext.Current.Items[Constants.IsMediaParameterName] = true;
                     HttpContext.Current.Server.Transfer(redirect);
                 }
                 else
                 {
-                    Sitecore.Web.WebUtil.AddQueryString(redirect, "IsMedia", "true");
+                    Sitecore.Web.WebUtil.AddQueryString(redirect, Constants.IsMediaParameterName, bool.TrueString);
                     HttpContext.Current.Response.Redirect(redirect);
                 }
 

@@ -13,6 +13,8 @@
 #endregion
 
 using System;
+using Sitecore.Web;
+using Unic.ErrorManager.Core.Definitions;
 
 namespace Unic.ErrorManager.Website.sitecore_modules.Web.Error_Manager
 {
@@ -30,15 +32,22 @@ namespace Unic.ErrorManager.Website.sitecore_modules.Web.Error_Manager
         /// <param name="e">The <see cref="T:System.EventArgs"/> object that contains the event data.</param>
         protected override void OnLoad(EventArgs e)
         {
-            // set properties
-            var isMedia = Context.Items.Contains("IsMedia")
-                ? Convert.ToBoolean(Context.Items["IsMedia"])
-                : Sitecore.Web.WebUtil.GetItemsBool("IsMedia", false);
-            base.SettingsKey = isMedia ? "MediaNotFoundUrl" : "ItemNotFoundUrl";
+            base.SettingsKey = this.IsMediaRequest() ? "MediaNotFoundUrl" : "ItemNotFoundUrl";
             base.StatusCode = 404;
 
-            // go
             base.OnLoad(e);
+        }
+
+        protected virtual bool IsMediaRequest()
+        {
+            var isMedia = this.Context.Items[Constants.IsMediaParameterName];
+            if (isMedia is bool isMediaRequest)
+            {
+                return isMediaRequest;
+            }
+
+            var isMediaQueryString = WebUtil.GetQueryString(Constants.IsMediaParameterName);
+            return bool.TryParse(isMediaQueryString, out var isMediaQuery) && isMediaQuery;
         }
     }
 }

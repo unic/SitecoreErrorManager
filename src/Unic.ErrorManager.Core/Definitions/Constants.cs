@@ -9,5 +9,7 @@
         public static string DisplayModeParameterName = "sc_mode";
 
         public static string DisplayModeParameterValueSetting = "normal";
+
+        public static string IsMediaParameterName = "IsMedia";
     }
 }
