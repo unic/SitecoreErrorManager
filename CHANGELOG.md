@@ -1,3 +1,19 @@
+# 8.0.3
+
+- suppress infinite loop by checking target URL and requested ones, if "AbsolutePath" is same, go to layout static page
+- add support to all versions of TLS
+
+# 8.0.2
+
+- fix many sessions problem caused by edit mode, which prevented users from logging in
+- introduce StringBuilder and fix minor code readability issues 
+
+# 8.0.1
+
+- fix exception for items from Media Library not being a file, thus not having Blob field
+- handle other exceptions during media item check with "not found" result
+- add DotNetCompilerPlatform to enable C# 6 compilation on TeamCity
+
 # 8.0
 
 - integrate the new Sitecore NuGet feed and reference the relevant NuGet packages from there
