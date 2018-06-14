@@ -10,8 +10,8 @@
 
         public static string DisplayModeParameterValueSetting = "normal";
 
-        public static string EnableDisableTrackingSetting = "EnableDisableTracking";
+        public static string DisableTrackingSetting = "DisableTracking";
 
-        public static string RedirectRequestBotSetting = "EnableDisableTracking";
+        public static string ErrorManagerUserAgentSetting = "ErrorManagerUserAgent";
     }
 }

@@ -16,7 +16,7 @@ namespace Unic.ErrorManager.Core.Pipelines.StartAnalytics
         {
             var disableTrackingValue = string.Empty;
 
-            if (Convert.ToBoolean(Settings.GetSetting(Constants.EnableDisableTrackingSetting)))
+            if (Convert.ToBoolean(Settings.GetSetting(Constants.DisableTrackingSetting)))
             {
                 disableTrackingValue = WebUtil.GetQueryString(Constants.DisableTrackingParameterName);
             }

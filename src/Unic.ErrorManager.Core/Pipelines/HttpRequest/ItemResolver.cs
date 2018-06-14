@@ -40,12 +40,13 @@ namespace Unic.ErrorManager.Core.Pipelines.HttpRequest
         /// <param name="args">Http request arguments.</param>
         public override void Process(HttpRequestArgs args)
         {
-            System.Web.HttpContext.Current.Request.Headers.Add("user-agent", Settings.GetSetting(Constants.RedirectRequestBotSetting));
 
             if (Sitecore.Context.Item == null || Sitecore.Context.Database == null)
             {
                 return;
             }
+
+            System.Web.HttpContext.Current.Request.Headers.Add("User-Agent", Settings.GetSetting(Constants.DisableTrackingSetting));
 
             // check for requets on /sitecore/content and show 404 if request contains the string
             if (Sitecore.Context.PageMode.IsNormal && Sitecore.Context.GetSiteName() != "shell" && Sitecore.Web.WebUtil.GetRawUrl().IndexOf("/sitecore/content") > -1)
