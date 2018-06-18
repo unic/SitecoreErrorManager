@@ -1,13 +1,12 @@
-﻿using System;
-using Sitecore.Common;
-using Sitecore.Configuration;
-using Sitecore.Diagnostics;
-using Sitecore.Pipelines;
-using Sitecore.Web;
-using Unic.ErrorManager.Core.Definitions;
-
-namespace Unic.ErrorManager.Core.Pipelines.StartAnalytics
+﻿namespace Unic.ErrorManager.Core.Pipelines.StartAnalytics
 {
+    using System;
+    using Sitecore.Configuration;
+    using Sitecore.Diagnostics;
+    using Sitecore.Pipelines;
+    using Sitecore.Web;
+    using Definitions;
+
     /// <summary>
     /// Disables the xDB tracker for requests from the error manager to the error pages due to session locks
     /// </summary>
