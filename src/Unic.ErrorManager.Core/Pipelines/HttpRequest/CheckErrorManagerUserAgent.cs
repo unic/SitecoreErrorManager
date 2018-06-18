@@ -1,24 +1,33 @@
-﻿using System;
-using System.Web;
-using Sitecore.Analytics.Pipelines.ExcludeRobots;
-using Sitecore.Configuration;
-using Sitecore.Diagnostics;
-using Unic.ErrorManager.Core.Definitions;
-
-namespace Unic.ErrorManager.Core.Pipelines.HttpRequest
+﻿namespace Unic.ErrorManager.Core.Pipelines.HttpRequest
 {
+    using System;
+    using System.Web;
+    using Sitecore;
+    using Sitecore.Analytics.Pipelines.ExcludeRobots;
+    using Sitecore.Configuration;
+    using Sitecore.Diagnostics;
+    using Constants = Definitions.Constants;
+
+    [UsedImplicitly]
     public class CheckErrorManagerUserAgent : ExcludeRobotsProcessor
     {
+        private HttpContextBase context;
+
         public HttpContextBase HttpContext
         {
             get
             {
-                if (System.Web.HttpContext.Current != null)
+                if (this.context != null)
                 {
-                    return new HttpContextWrapper(System.Web.HttpContext.Current);
+                    return this.context;
                 }
 
-                return null;
+                if (System.Web.HttpContext.Current == null)
+                {
+                    return null;
+                }
+
+                return this.context = new HttpContextWrapper(System.Web.HttpContext.Current);
             }
         }
 
@@ -28,9 +37,10 @@ namespace Unic.ErrorManager.Core.Pipelines.HttpRequest
 
             var httpContext = this.HttpContext;
             var userAgent = httpContext.Request.UserAgent;
+            var userAgentSetting = Settings.GetSetting(Constants.ErrorManagerUserAgentSetting);
 
-            if (userAgent == null || !string.Equals(Settings.GetSetting(Constants.ErrorManagerUserAgentSetting), userAgent, StringComparison.InvariantCultureIgnoreCase)) return;
-            
+            if (userAgent == null || !string.Equals(userAgentSetting, userAgent, StringComparison.InvariantCultureIgnoreCase)) return;
+
             args.IsInExcludeList = true;
         }
     }
