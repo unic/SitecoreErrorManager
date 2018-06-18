@@ -169,6 +169,12 @@ namespace Unic.ErrorManager.Core.Controls
                 this.AddRequestCookies(request);
             }
 
+            // add user-agent to the request
+            if (Settings.GetBoolSetting(Definitions.Constants.AddUserAgentHeaderSetting, true))
+            {
+                this.AddUserAgentHeader(request);
+            }
+
             // handle header forwarding
             this.HandleHeaderForwarding(request);
 
@@ -260,6 +266,14 @@ namespace Unic.ErrorManager.Core.Controls
             }
 
             return new NetworkCredential(username, password);
+        }
+
+        protected virtual void AddUserAgentHeader(HttpWebRequest request)
+        {
+            var userAgent = Settings.GetSetting(Definitions.Constants.UserAgentSetting);
+            if (string.IsNullOrWhiteSpace(userAgent)) return;
+
+            request.Headers.Add("User-Agent", userAgent);
         }
 
         private void HandleHeaderForwarding(HttpWebRequest request)

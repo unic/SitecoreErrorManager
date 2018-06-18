@@ -1,6 +1,7 @@
 ﻿using System;
 using Sitecore.Common;
 using Sitecore.Configuration;
+using Sitecore.Diagnostics;
 using Sitecore.Pipelines;
 using Sitecore.Web;
 using Unic.ErrorManager.Core.Definitions;
@@ -14,18 +15,28 @@ namespace Unic.ErrorManager.Core.Pipelines.StartAnalytics
     {
         public virtual void Process(PipelineArgs args)
         {
-            var disableTrackingValue = string.Empty;
+            Assert.ArgumentNotNull(args, nameof(args));
 
-            if (Convert.ToBoolean(Settings.GetSetting(Constants.DisableTrackingSetting)))
-            {
-                disableTrackingValue = WebUtil.GetQueryString(Constants.DisableTrackingParameterName);
-            }
+            if (!this.ShouldExecute()) return;
 
-            if (!string.IsNullOrEmpty(disableTrackingValue) 
-                && disableTrackingValue.Equals(Settings.GetSetting(Constants.DisableTrackingParameterValueSetting, string.Empty)))
+            if (this.ShouldDisableTracking())
             {
                 args.AbortPipeline();
             }
+        }
+
+        protected virtual bool ShouldExecute()
+        {
+            return Settings.GetBoolSetting(Constants.DisableTrackingSetting, true);
+        }
+
+        protected virtual bool ShouldDisableTracking()
+        {
+            var disableTrackingParameterValueQuery = WebUtil.GetQueryString(Constants.DisableTrackingParameterName);
+            if (string.IsNullOrWhiteSpace(disableTrackingParameterValueQuery)) return false;
+
+            var disableTrackingParameterValue = Settings.GetSetting(Constants.DisableTrackingParameterValueSetting);
+            return string.Equals(disableTrackingParameterValueQuery, disableTrackingParameterValue, StringComparison.InvariantCultureIgnoreCase);
         }
     }
 }

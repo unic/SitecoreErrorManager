@@ -35,13 +35,24 @@
         {
             Assert.ArgumentNotNull(args, nameof(args));
 
-            var httpContext = this.HttpContext;
-            var userAgent = httpContext.Request.UserAgent;
-            var userAgentSetting = Settings.GetSetting(Constants.ErrorManagerUserAgentSetting);
+            if (!this.ShouldExecute()) return;
 
-            if (userAgent == null || !string.Equals(userAgentSetting, userAgent, StringComparison.InvariantCultureIgnoreCase)) return;
+            var request = this.HttpContext?.Request;
+            args.IsInExcludeList = this.CheckUserAgent(request);
+        }
 
-            args.IsInExcludeList = true;
+        protected virtual bool ShouldExecute()
+        {
+            return Settings.GetBoolSetting(Constants.EnableAgentHeaderCheckSetting, true);
+        }
+
+        protected virtual bool CheckUserAgent(HttpRequestBase request)
+        {
+            var userAgent = request?.UserAgent;
+            if (userAgent == null) return false;
+
+            var userAgentSetting = Settings.GetSetting(Constants.UserAgentSetting);
+            return string.Equals(userAgent, userAgentSetting, StringComparison.InvariantCultureIgnoreCase);
         }
     }
 }

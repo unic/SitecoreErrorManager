@@ -6,14 +6,18 @@
 
         public static string DisableTrackingParameterValueSetting = "ErrorManager.DisableTrackingParameterValue";
 
+        public static string DisableTrackingSetting = "ErrorManager.DisableTracking";
+
         public static string DisplayModeParameterName = "sc_mode";
 
         public static string DisplayModeParameterValueSetting = "normal";
 
-        public static string DisableTrackingSetting = "DisableTracking";
-
-        public static string ErrorManagerUserAgentSetting = "ErrorManagerUserAgent";
-
         public static string IsMediaParameterName = "IsMedia";
+
+        public static string UserAgentSetting = "ErrorManager.UserAgent";
+
+        public static string AddUserAgentHeaderSetting = "ErrorManager.AddUserAgentHeader";
+
+        public static string EnableAgentHeaderCheckSetting = "ErrorManager.EnableAgentHeaderCheck";
     }
 }
