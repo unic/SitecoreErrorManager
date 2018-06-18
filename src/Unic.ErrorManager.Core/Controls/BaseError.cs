@@ -273,7 +273,7 @@ namespace Unic.ErrorManager.Core.Controls
             var userAgent = Settings.GetSetting(Definitions.Constants.UserAgentSetting);
             if (string.IsNullOrWhiteSpace(userAgent)) return;
 
-            request.Headers.Add("User-Agent", userAgent);
+            request.UserAgent = userAgent;
         }
 
         private void HandleHeaderForwarding(HttpWebRequest request)
