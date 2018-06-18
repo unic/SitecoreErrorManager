@@ -92,14 +92,14 @@ namespace Unic.ErrorManager.Core.Controls
             ServicePointManager.SecurityProtocol = ServicePointManager.SecurityProtocol | SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
             
             base.OnLoad(e);
-
+            var isUsingStatic = Sitecore.Configuration.Settings.GetBoolSetting(SettingsKey + ".UseStatic", false);
             // initial parameters
             Language lang = UrlUtil.ResolveLanguage();
             SiteContext site = UrlUtil.ResolveSite(lang);
             StringBuilder url = null;
 
             // Use the static error page if the site or the database is not available
-            if (site?.Database == null)
+            if (isUsingStatic || site?.Database == null)
             {
                 url = new StringBuilder(WebUtil.GetServerUrl() + Settings.GetSetting(this.SettingsKey + ".Static"));
             }

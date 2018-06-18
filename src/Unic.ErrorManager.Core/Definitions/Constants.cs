@@ -13,5 +13,7 @@
         public static string DisableTrackingSetting = "DisableTracking";
 
         public static string ErrorManagerUserAgentSetting = "ErrorManagerUserAgent";
+
+        public static string IsMediaParameterName = "IsMedia";
     }
 }
