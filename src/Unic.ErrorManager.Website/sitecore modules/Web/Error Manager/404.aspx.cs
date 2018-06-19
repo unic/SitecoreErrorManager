@@ -18,7 +18,7 @@ using Unic.ErrorManager.Core.Definitions;
 
 namespace Unic.ErrorManager.Website.sitecore_modules.Web.Error_Manager
 {
-    using Unic.ErrorManager.Core.Controls;
+    using Core.Controls;
 
     /// <summary>
     /// Page for status code 404 (notfound). It inherits from the <see cref="BaseError"/>, which does all needed stuff.
@@ -41,13 +41,15 @@ namespace Unic.ErrorManager.Website.sitecore_modules.Web.Error_Manager
         protected virtual bool IsMediaRequest()
         {
             var isMedia = this.Context.Items[Constants.IsMediaParameterName];
-            if (isMedia is bool isMediaRequest)
+            if (isMedia is bool)
             {
-                return isMediaRequest;
+                return (bool)isMedia;
             }
 
             var isMediaQueryString = WebUtil.GetQueryString(Constants.IsMediaParameterName);
-            return bool.TryParse(isMediaQueryString, out var isMediaQuery) && isMediaQuery;
+
+            bool isMediaQuery;
+            return bool.TryParse(isMediaQueryString, out isMediaQuery) && isMediaQuery;
         }
     }
 }

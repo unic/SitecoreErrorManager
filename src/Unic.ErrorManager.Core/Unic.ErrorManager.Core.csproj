@@ -65,6 +65,7 @@
     </Compile>
     <Compile Include="Definitions\Constants.cs" />
     <Compile Include="Extensions\ItemExtension.cs" />
+    <Compile Include="Pipelines\HttpRequest\CheckErrorManagerUserAgent.cs" />
     <Compile Include="Pipelines\HttpRequest\ItemResolver.cs" />
     <Compile Include="Pipelines\StartAnalytics\DisableRequestTracking.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

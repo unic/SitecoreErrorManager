@@ -14,9 +14,9 @@
 
 namespace Unic.ErrorManager.Core.Pipelines.HttpRequest
 {
+    using Sitecore;
     using Sitecore.Pipelines.HttpRequest;
-
-    using Unic.ErrorManager.Core.Extensions;
+    using Extensions;
 
     /// <summary>
     /// Pipeline processor to resolve if the resolved context item has a valid language version. You can speficy available (valid) languages
@@ -27,6 +27,7 @@ namespace Unic.ErrorManager.Core.Pipelines.HttpRequest
     /// Please see <c>Unic.Modules.ErrorManager.config</c> for a configuration example.
     /// </summary>
     /// <author>Kevin Brechbühl - Unic AG</author>
+    [UsedImplicitly]
     public class ItemResolver : HttpRequestProcessor
     {
         /// <summary>
@@ -52,7 +53,7 @@ namespace Unic.ErrorManager.Core.Pipelines.HttpRequest
             if (Sitecore.Context.Item != null &&
                 !Sitecore.Context.PageMode.IsExperienceEditor &&
                 Sitecore.Context.Site.Name != "shell" &&
-                (System.Web.HttpContext.Current.Request.ServerVariables["SCRIPT_NAME"] != "/default.aspx" || 
+                (System.Web.HttpContext.Current.Request.ServerVariables["SCRIPT_NAME"] != "/default.aspx" ||
                 Sitecore.Web.WebUtil.GetRawUrl() == "/" + Sitecore.Context.Language))
             {
                 if (!Sitecore.Context.Item.HasLanguageVersion(Sitecore.Context.Language, Sitecore.Context.Site.Properties["availableLanguages"]))

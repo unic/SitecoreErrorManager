@@ -1,3 +1,9 @@
+# 8.1
+
+- New feature: Support for personalization on error pages. To enable this feature, you need to set the "ErrorManager.DisableTracking" setting to false.
+- Allow different NotFoundUrl between media requests and non-media requests
+- Introduce MediaNotFoundUrl.UseStatic as preset for static url
+
 # 8.0.3
 
 - suppress infinite loop by checking target URL and requested ones, if "AbsolutePath" is same, go to layout static page
