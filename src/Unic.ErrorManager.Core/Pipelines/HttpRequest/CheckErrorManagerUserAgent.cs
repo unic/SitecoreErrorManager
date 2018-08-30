@@ -11,33 +11,14 @@
     [UsedImplicitly]
     public class CheckErrorManagerUserAgent : ExcludeRobotsProcessor
     {
-        private HttpContextBase context;
-
-        public HttpContextBase HttpContext
-        {
-            get
-            {
-                if (this.context != null)
-                {
-                    return this.context;
-                }
-
-                if (System.Web.HttpContext.Current == null)
-                {
-                    return null;
-                }
-
-                return this.context = new HttpContextWrapper(System.Web.HttpContext.Current);
-            }
-        }
-
         public override void Process(ExcludeRobotsArgs args)
         {
             Assert.ArgumentNotNull(args, nameof(args));
 
             if (!this.ShouldExecute()) return;
 
-            var request = this.HttpContext?.Request;
+            var context = this.GetHttpContext();
+            var request = context?.Request;
             args.IsInExcludeList = this.CheckUserAgent(request);
         }
 
@@ -53,6 +34,11 @@
 
             var userAgentSetting = Settings.GetSetting(Constants.UserAgentSetting);
             return string.Equals(userAgent, userAgentSetting, StringComparison.InvariantCultureIgnoreCase);
+        }
+
+        protected virtual HttpContextWrapper GetHttpContext()
+        {
+            return new HttpContextWrapper(HttpContext.Current);
         }
     }
 }
