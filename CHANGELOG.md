@@ -1,3 +1,7 @@
+# 8.1.1
+
+- Fix issue #16 where the HttpContext in the CheckErrorManagerUserAgent processor inherits the lifetime scope of the processor, resulting in flagging every visitor as bot and with this, disabling personalization on all components.
+
 # 8.1
 
 - New feature: Support for personalization on error pages. To enable this feature, you need to set the "ErrorManager.DisableTracking" setting to false.
