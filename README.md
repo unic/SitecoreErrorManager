@@ -26,6 +26,7 @@ The current version of the Sitecore Error Manager works with the following Sitec
 ## Contribute
 
 Contributions to the module are very welcome! You can fork the project and issue [Pull Requests](https://help.github.com/articles/creating-a-pull-request) to do so.
+Please note: you'll have to accept the CLA provided.
 
 ## License
 The Sitecore Error Manager is licensed under the LGPL. Please see [LICENSE.txt](https://github.com/unic/SitecoreErrorManager/blob/master/LICENSE.txt) for more informations.
