@@ -25,6 +25,7 @@ namespace Unic.ErrorManager.Core.Controls
     using Sitecore.Configuration;
     using Sitecore.Data.Items;
     using Sitecore.Data.Managers;
+    using Sitecore.Diagnostics;
     using Sitecore.Exceptions;
     using Sitecore.Globalization;
     using Sitecore.Links;
@@ -213,6 +214,8 @@ namespace Unic.ErrorManager.Core.Controls
             {
                 // we need to catch this, because statuscode of the sitecore default error pages may throwing an exception in the HttpWebResponse object
                 response = (HttpWebResponse)ex.Response;
+
+                Log.Error($"ErrorManager : {ex.Message}. Request URL: {url}. ", ex, this);
             }
             finally
             {
