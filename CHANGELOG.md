@@ -1,3 +1,7 @@
+# 8.1.3
+
+- Fix unwanted white space on not found pages due to img element not being hidden
+
 # 8.1.2
 
 - More logging on server error
