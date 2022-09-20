@@ -236,7 +236,7 @@ namespace Unic.ErrorManager.Core.Controls
                 if (Settings.GetBoolSetting("Xdb.Enabled", false) && site.Tracking().EnableTracking)
                 {
                     body = body.Replace("</body>",
-                        string.Format("<img src=\"{0}?{1}\" height=\"1\" width=\"1\" border=\"0\"></body>",
+                        string.Format("<img src=\"{0}?{1}\" style=\"display: none;\"></body>",
                             Settings.GetSetting(this.SettingsKey + ".Static"),
                             base.Request.QueryString));
                 }
