@@ -19,5 +19,7 @@
         public static string AddUserAgentHeaderSetting = "ErrorManager.AddUserAgentHeader";
 
         public static string EnableAgentHeaderCheckSetting = "ErrorManager.EnableAgentHeaderCheck";
+
+        public static string HostnameAllowListSetting = "ErrorManager.HostnameAllowList";
     }
 }
