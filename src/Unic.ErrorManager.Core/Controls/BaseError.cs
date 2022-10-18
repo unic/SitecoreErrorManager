@@ -89,6 +89,18 @@ namespace Unic.ErrorManager.Core.Controls
         /// <param name="e">The <see cref="T:System.EventArgs"/> object that contains the event data.</param>
         protected override void OnLoad(EventArgs e)
         {
+            // if a hostname allow list is defined and the host header value from the request doesn't appear in this list, the rest of this method isn't executed to prevent potential SSRF
+            var hostnameAllowList = Settings.GetSetting(Definitions.Constants.HostnameAllowListSetting);
+            if (!string.IsNullOrWhiteSpace(hostnameAllowList))
+            {
+                if (!hostnameAllowList.Split(';').Any(h => h.Equals(Request.Headers["host"])))
+                {
+                    this.Response.StatusCode = 403;
+                    this.Response.Write("403 Forbidden");
+                    return;
+                }
+            }
+
             // add support to all versions of tls
             ServicePointManager.SecurityProtocol = ServicePointManager.SecurityProtocol | SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
             
