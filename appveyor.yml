@@ -29,7 +29,7 @@ assembly_info:
   patch: false
 
 before_build:
-  - nuget restore
+  - nuget restore -Verbosity detailed
   - ps: gitversion /l console /output buildserver /updateAssemblyInfo
 
 build:
