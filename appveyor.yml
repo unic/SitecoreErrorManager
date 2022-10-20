@@ -29,6 +29,7 @@ assembly_info:
   patch: false
 
 before_build:
+  - nuget sources add -Name "Agent NuGet Feed" -Source C:\Users\appveyor\.nuget\packages
   - nuget restore -Verbosity detailed
   - ps: gitversion /l console /output buildserver /updateAssemblyInfo
 
