@@ -29,7 +29,6 @@ assembly_info:
   patch: false
 
 before_build:
-  - nuget sources add -Name "Sitecore NuGet Feed" -Source https://sitecore.myget.org/F/sc-packages/api/v3/index.json
   - nuget restore
   - ps: gitversion /l console /output buildserver /updateAssemblyInfo
 
