@@ -1,5 +1,5 @@
 version: '{build}'
-image: Visual Studio 2017
+image: Visual Studio 2015
 
 environment:
   RepoName: SitecoreErrorManager
@@ -29,8 +29,7 @@ assembly_info:
   patch: false
 
 before_build:
-  - nuget sources add -Name "Agent NuGet Feed" -Source C:\Users\appveyor\.nuget\packages
-  - nuget restore -Verbosity detailed
+  - nuget restore
   - ps: gitversion /l console /output buildserver /updateAssemblyInfo
 
 build:
