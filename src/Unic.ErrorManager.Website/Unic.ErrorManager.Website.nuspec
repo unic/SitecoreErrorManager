@@ -12,7 +12,7 @@
     <releaseNotes></releaseNotes>
     <tags>Sitecore Unic Error Manager 404 notfound</tags>
     <dependencies>
-        <dependency id="Unic.ErrorManager.Core" version="$NuGetVersion$" />
+        <dependency id="Unic.ErrorManager.Core" version="$VERSION$" />
     </dependencies> 
   </metadata>
 </package>
