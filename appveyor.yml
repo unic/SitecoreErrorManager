@@ -1,0 +1,54 @@
+version: '{build}'
+image: Visual Studio 2015
+
+environment:
+  RepoName: SitecoreErrorManager
+  NuGetToken:
+    secure: jhODVb/iVko3b4Y9p1tOMP9LeDy6OQEYePDIDT6lfAOgNnJixjJpJBAJj/gtkDLc
+  Artefact_Output_Dir: .\output
+  GithubEmail: team-unic@unic.com
+  GithubUsername: team-unic
+  GithubAccessTokenTeamUnic:
+    secure: BCEthL/NRFeg5eKK9CgmwbySILxWjMUjpvExHC0oGl1jjAT4kMBAohzh9m/xsVDh
+
+install:
+  - choco install gitversion.portable -y
+  - ps: gitversion /l console /output buildserver
+
+  # Setup GIT
+  - git config --global user.email %GithubEmail%
+  - git config --global user.name %GithubUsername%
+  - git config --global push.default simple
+  - git config --global core.autocrlf true
+  - git config --global core.safecrlf false
+  - git config --global credential.helper store
+
+configuration: Release
+
+assembly_info:
+  patch: false
+
+before_build:
+  - nuget restore
+  - ps: gitversion /l console /output buildserver /updateAssemblyInfo
+
+build:
+  verbosity: normal
+
+after_build:
+  - cmd: nuget pack .\src\Unic.ErrorManager.Core\Unic.ErrorManager.Core.csproj -version "%GitVersion_NuGetVersionV2%" -prop "target=%CONFIGURATION%"
+  - cmd: appveyor PushArtifact "Unic.ErrorManager.Core.%GitVersion_NuGetVersionV2%.nupkg"
+
+  - cmd: nuget pack .\src\Unic.ErrorManager.Website\Unic.ErrorManager.Website.csproj -version "%GitVersion_NuGetVersionV2%" -prop "target=%CONFIGURATION%"
+  - cmd: appveyor PushArtifact "Unic.ErrorManager.%GitVersion_NuGetVersionV2%.nupkg"
+
+deploy:
+  - provider: Environment
+    name: NuGet.org
+    on:
+      branch: main
+
+  - provider: Environment
+    name: NuGet.org
+    on:
+      APPVEYOR_REPO_TAG: true
