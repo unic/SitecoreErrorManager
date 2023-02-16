@@ -20,8 +20,6 @@ namespace Unic.ErrorManager.Core.Controls
     using System.Net.Security;
     using System.Security.Cryptography.X509Certificates;
     using System.Text;
-
-    using Sitecore.Analytics;
     using Sitecore.Configuration;
     using Sitecore.Data.Items;
     using Sitecore.Data.Managers;
@@ -142,9 +140,6 @@ namespace Unic.ErrorManager.Core.Controls
                 url.Append(url.ToString().IndexOf("?") == -1 ? "?" : "&");
                 url.Append("rawUrl=" + this.Server.UrlEncode(WebUtil.GetRawUrl()));
 
-                // add the tracking disable parameter
-                url.Append(string.Format("&{0}={1}", Definitions.Constants.DisableTrackingParameterName, Settings.GetSetting(Definitions.Constants.DisableTrackingParameterValueSetting, string.Empty)));
-
                 // change display mode to normal
                 url.Append(string.Format("&{0}={1}", Definitions.Constants.DisplayModeParameterName, Definitions.Constants.DisplayModeParameterValueSetting));
             }
@@ -227,16 +222,6 @@ namespace Unic.ErrorManager.Core.Controls
             if (response != null)
             {
                 string body = new StreamReader(response.GetResponseStream()).ReadToEnd();
-
-                // Insert image with request to the static page if Analytics is enabled.
-                // This is a hotfix for a Sitecore bug, see Sitecore issue #378950
-                if (Settings.GetBoolSetting("Xdb.Enabled", false) && site.Tracking().EnableTracking)
-                {
-                    body = body.Replace("</body>",
-                        string.Format("<img src=\"{0}?{1}\" height=\"1\" width=\"1\" border=\"0\"></body>",
-                            Settings.GetSetting(this.SettingsKey + ".Static"),
-                            base.Request.QueryString));
-                }
 
                 this.Response.Write(body);
             }
