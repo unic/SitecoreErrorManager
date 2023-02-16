@@ -1,15 +1,3 @@
-# 8.1.4
-
-- Fix potential SSRF vulnerability
-
-# 8.1.3
-
-- Fix unwanted white space on not found pages due to img element not being hidden
-
-# 8.1.2
-
-- More logging on server error
-
 # 8.1.1
 
 - Fix issue #16 where the HttpContext in the CheckErrorManagerUserAgent processor inherits the lifetime scope of the processor, resulting in flagging every visitor as bot and with this, disabling personalization on all components.
