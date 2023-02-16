@@ -1,4 +1,4 @@
 mode: ContinuousDeployment
 branches:  
    master:  
-      regex: ^master$|^main$|^fork.*
+      regex: ^master$|^main$
