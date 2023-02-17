@@ -1,0 +1,10 @@
+mode: ContinuousDeployment
+branches:  
+   master:  
+      regex: ^master$|^main$
+   xm:
+      regex: ^fork/xm$
+      mode: ContinuousDelivery
+      increment: None
+      tag: "xm"
+      source-branches: []
