@@ -75,6 +75,5 @@
         </div>
       </div>
     </div>
-    <sc:VisitorIdentification runat="server" />
   </body>
 </html>
