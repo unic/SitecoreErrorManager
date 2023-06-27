@@ -4,7 +4,7 @@ branches:
       regex: ^master$|^main$
    xm:
       regex: ^fork/xm$
-      mode: ContinuousDelivery
+      mode: ContinuousDeployment
       increment: None
       tag: "xm"
       source-branches: []
